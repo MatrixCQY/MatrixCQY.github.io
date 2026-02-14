@@ -9,7 +9,7 @@ author_profile: true
 [https://matrixcqy.github.io/bbblog/](https://matrixcqy.github.io/bbblog/)
 
 ## PDF Notes
-<iframe src="https://drive.google.com/embeddedfolderview?id=1Ah94F0BI-j-2OciplJW4GkRjC5OIHLbc#grid" style="width:100%; height:600px; border:0;"></iframe>
+[📂 Access PDF Notes (Google Drive)](https://drive.google.com/drive/folders/1Ah94F0BI-j-2OciplJW4GkRjC5OIHLbc)
 
 {% include base_path %}
 {% for post in site.posts %}
