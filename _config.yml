@@ -10,7 +10,7 @@
 locale                   : "en-US"
 site_theme               : "default" # The available themes options are "default", "air", "sunrise", "mint", "dirt" and "contrast"
 minimal_mistakes_skin    : "dark"
-title                    : "Welcome to Qiyang CHENG's Website"
+title                    : "MatrixCQY"
 title_separator          : "-"
 name                     : &name "Qiyang CHENG"
 description              : &description "Qiyang CHENG's academic portfolio"   # Update this with a general description of your site, this is the default if not overridden by a page
