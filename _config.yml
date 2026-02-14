@@ -10,6 +10,7 @@
 locale                   : "en-US"
 site_theme               : "default" # The available themes options are "default", "air", "sunrise", "mint", "dirt" and "contrast"
 minimal_mistakes_skin    : "dark"
+# Force rebuild: 2026-02-14
 title                    : "MatrixCQY"
 title_separator          : "-"
 name                     : &name "Qiyang CHENG"
