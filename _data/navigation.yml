@@ -18,7 +18,7 @@ main:
     url: /cv/
 
   - title: "Notes"
-    url: /year-archive/
+    url: https://matrixcqy.github.io/bbblog/
 
   - title: "Reading List"
     url: /markdown/

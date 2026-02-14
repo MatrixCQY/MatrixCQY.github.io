@@ -11,7 +11,7 @@ redirect_from:
 
 Education
 ======
-* B.S. in Mathematics and Applied Mathematics, Fudan University, 2027
+* B.S. in Mathematics and Applied   
 
 Exchange Experience
 ======
@@ -50,4 +50,4 @@ Teaching
 
 Service and leadership
 ======
-Mid Lane Shotcaller in League of Legends (LoL)
+  Mid Lane Shotcaller in League of Legends (LoL)
