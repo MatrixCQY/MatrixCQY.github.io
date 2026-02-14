@@ -1,11 +1,15 @@
 ---
-title: "Blog posts"
+title: "Notes"
 layout: archive
 permalink: /year-archive/
 author_profile: true
 ---
 
+## Blog Posts
 [https://matrixcqy.github.io/bbblog/](https://matrixcqy.github.io/bbblog/)
+
+## PDF Notes
+Coming soon...
 
 {% include base_path %}
 {% for post in site.posts %}
