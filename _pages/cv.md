@@ -13,6 +13,12 @@ Education
 ======
 * B.S. in Mathematics and Applied Mathematics, Fudan University, 2027
 
+Exchange Experience
+======
+* Fall 2027: Exchange Student
+  * Department of Mathematics, The Hong Kong University of Science and Technology (HKUST)
+
+
 Work experience
 ======
 
@@ -25,7 +31,7 @@ Skills
 ======
 * Languages:
   * English
-  * Chinese
+  * Chinese(Native)
 * Programming Languages:
   * Python
   * C++
