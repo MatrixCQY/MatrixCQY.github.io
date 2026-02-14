@@ -11,7 +11,7 @@ redirect_from:
 
 Education
 ======
-* B.S. in Mathematics and Applied   
+* B.S. in Mathematics and Applied Mathematics, Fudan University, 2027
 
 Exchange Experience
 ======
