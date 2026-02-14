@@ -9,7 +9,7 @@ author_profile: true
 [https://matrixcqy.github.io/bbblog/](https://matrixcqy.github.io/bbblog/)
 
 ## PDF Notes
-- [📄 FAHW Note](/pdf-viewer/?file=/files/FAHW.pdf)
+- [📝 FAHW Note (Notion)](https://www.notion.so/FA-3071bedeb15f80fabf93f97c2b4a11ca?source=copy_link)
 
 {% include base_path %}
 {% for post in site.posts %}
