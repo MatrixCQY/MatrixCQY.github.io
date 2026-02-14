@@ -27,11 +27,11 @@ author:
   avatar           : "profile.png"
   name             : "Qiyang CHENG"
   pronouns         : # example: "she/her"  
-  bio              : "PhD Student at CUHK"
-  location         : "Hong Kong, China"
-  employer         : "The Chinese University of Hong Kong"
+  bio              : "UG"
+  location         : "Shanghai, China"
+  employer         : "Fudan University"
   uri              : # URL
-  email            : "qingcong@example.edu" 
+  email            : "qchengae@connect.ust.hk" 
 
   # Academic websites
   academia         : # URL
@@ -58,7 +58,7 @@ author:
 
   # Social media
   artstation       : # Username
-  bluesky          : "bsky.app" # Replace this with you Bluesky username
+  bluesky          : # Replace this with you Bluesky username
   facebook         : # Username
   flickr           : # Username
   foursquare       : # Username
@@ -85,10 +85,7 @@ author:
 
 # Publication Category - The following the list of publication categories and their headings
 publication_category:
-  biology:
-    title: 'Biology'
-  astrophysics:
-    title: 'Astrophysics'
+
 
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/ for social media previews
