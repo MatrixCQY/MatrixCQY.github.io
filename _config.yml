@@ -10,10 +10,10 @@
 locale                   : "en-US"
 site_theme               : "default" # The available themes options are "default", "air", "sunrise", "mint", "dirt" and "contrast"
 minimal_mistakes_skin    : "dark"
-title                    : "Welcome to Qing Cong's Website"
+title                    : "Welcome to Qiyang CHENG's Website"
 title_separator          : "-"
-name                     : &name "Qing Cong"
-description              : &description "Qing Cong's academic portfolio"   # Update this with a general description of your site, this is the default if not overridden by a page
+name                     : &name "Qiyang CHENG"
+description              : &description "Qiyang CHENG's academic portfolio"   # Update this with a general description of your site, this is the default if not overridden by a page
 url                      : https://MatrixCQY.github.io # The base hostname & protocol for your site e.g. "https://[your GitHub username].github.io",
                                                            # or if you already have some other page hosted on Github then use "https://[your GitHub username].github.io/[Your Repo Name]"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
@@ -25,7 +25,7 @@ repository               : "MatrixCQY/MatrixCQY.github.io"
 author:
   # Biographic information
   avatar           : "profile.png"
-  name             : "Qing Cong"
+  name             : "Qiyang CHENG"
   pronouns         : # example: "she/her"  
   bio              : "PhD Student at CUHK"
   location         : "Hong Kong, China"
