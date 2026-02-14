@@ -20,5 +20,8 @@ main:
   - title: "Notes"
     url: /notes/
 
+  - title: "Portfolio"
+    url: /portfolio/
+
   - title: "Reading List"
     url: /markdown/
