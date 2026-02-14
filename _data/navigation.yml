@@ -18,7 +18,7 @@ main:
     url: /cv/
 
   - title: "Notes"
-    url: /year-archive/
+    url: /notes/
 
   - title: "Reading List"
     url: /markdown/
