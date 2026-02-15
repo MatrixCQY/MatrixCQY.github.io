@@ -18,6 +18,7 @@ package-lock.json
 
 # Ignore folders related to IDEs
 .vscode/
+.trae/
 
 # Ignore files created by MacOS
 .DS_Store
