@@ -15,7 +15,7 @@ Education
 
 Exchange Experience
 ======
-* Fall 2027: Exchange Student
+* Fall 2025: Exchange Student
   * Department of Mathematics, The Hong Kong University of Science and Technology (HKUST)
 
 Work experience
@@ -33,7 +33,6 @@ Skills
 * Programming Languages:
   * Python
   * C++
-  * R
 * Writing:
   * Technical writing
   * Research papers
