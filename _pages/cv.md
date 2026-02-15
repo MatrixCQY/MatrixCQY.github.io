@@ -45,12 +45,11 @@ Preprints
 ======
   Coming soon...
 
-Talks
-======
-
 Teaching
 ======
+  * High School Math (2024-2025)
+    * The student successfully passed the college entrance examination in 2025 and was admitted to Fudan University, with a score of 131 in mathematics.
 
 Service and leadership
 ======
-  Mid Lane Shotcaller in League of Legends (LoL)
+  * Mid Lane Shotcaller in League of Legends (LoL) :)
