@@ -41,3 +41,17 @@
     "vendor/font-awesome/solid",
     "vendor/font-awesome/brands"
 ;
+
+/* Force display author details on mobile */
+@media (max-width: 64em) {
+  .author__urls-wrapper {
+    display: block !important;
+  }
+  .author__urls.social-icons {
+    display: block !important;
+  }
+  /* Hide the "Follow" button since content is always visible */
+  .author__urls-wrapper button {
+    display: none !important;
+  }
+}
