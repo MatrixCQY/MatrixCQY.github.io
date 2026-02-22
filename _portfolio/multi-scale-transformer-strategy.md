@@ -13,14 +13,49 @@ The strategy combines traditional volume-price factors (Alpha 101) with modern a
 ![Equity Curve](/images/quant-strategy-1.png)
 *Figure 1: Equity Curve (Model vbest) with Market Regimes*
 
-The strategy demonstrates robust performance across different market regimes (Bull/Bear), achieving a Sharpe Ratio of **1.43**.
+## 1. Trading Signal Analysis (601857) 
+Detailed view of model signals on the best performing asset.
 
-## Signal Analysis
-
-![Price & Trading Signals](/images/quant-strategy-2.png)
+![Trading Signals](/images/quant-strategy-2.png)
 *Figure 2: Price & Trading Signals (Stock 601857)*
 
-![Price & Trading Signals](/images/quant-strategy-3.png)
-*Figure 3: Price & Trading Signals (Stock 300750)*
+## 2. Key Performance Metrics
 
-The model effectively identifies buy/sell signals by analyzing multi-scale temporal features, providing stable excess returns over the benchmark.
+| Metric | Strategy | Benchmark |
+|--------|----------|-----------|
+| Total Return | **89.34%** | 20.08% |
+| Annualized Return | **41.55%** | 10.47% |
+| Annualized Volatility | 0.2512 | 0.1925 |
+| Sharpe Ratio | **1.4275** | 0.5089 |
+| Max Drawdown | -25.27% | -20.40% |
+| Win Rate | 45.57% | 48.81% |
+
+## 3. Advanced Risk Metrics
+
+- **Sortino Ratio:** 3.6661
+- **Calmar Ratio:** 1.6444
+- **Profit Factor:** 1.3209
+- **Alpha:** 0.2916
+- **Beta:** 1.0610
+
+## 4. Market Regime Analysis (Sub-period)
+
+Performance broken down by inferred market regimes (based on Benchmark behavior).
+
+| Regime | Annualized Return | Sharpe | Win Rate |
+|--------|-------------------|--------|----------|
+| **Bull Market** | **243.37%** | 5.88 | 50.77% |
+| **Bear Market** | -49.94% | -2.84 | 38.10% |
+| **Sideways/Volatile** | 10.69% | 0.51 | 45.51% |
+
+## 5. Rank Ability (IC)
+
+- **Mean IC:** 0.0843
+- **ICIR:** 0.2895
+
+## 6. Strategy Settings
+
+- **Top K:** 5
+- **Position Sizing:** Equal Weight
+- **Stop Loss:** -3%
+- **Transaction Cost:** 10 bps
