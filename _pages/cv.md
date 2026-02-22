@@ -48,7 +48,7 @@ Preprints
 Teaching
 ======
   * High School Math (2024-2025)
-    * The student successfully passed the college entrance examination in 2025 and was admitted to Fudan University, with a score of 131 in mathematics.
+    * The student successfully passed the college entrance examination in 2025 and was admitted to Fudan University, with a score of 131 in mathematics.(from 110+ to 130+)
 
 Service and leadership
 ======
