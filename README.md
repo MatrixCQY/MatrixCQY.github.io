@@ -1,6 +1,6 @@
-# Qiyang CHENG's Academic Website
+# QY CHENG's Academic Website
 
-This repository hosts the source code for the personal academic website of **Qiyang CHENG**.
+This repository hosts the source code for the personal academic website of **QY CHENG**.
 
 **Live Website**: [https://MatrixCQY.github.io](https://MatrixCQY.github.io)
 
