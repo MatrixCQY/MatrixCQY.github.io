@@ -42,6 +42,27 @@
     "vendor/font-awesome/brands"
 ;
 
+/* Discourage casual copy-selecting of page text. This is a UX deterrent only —
+   it does not block "view source", devtools, or disabling JS, so treat it as
+   cosmetic rather than real protection. Links/forms/code stay selectable so
+   contact info, citations' download links, and search still work normally. */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+a,
+input,
+textarea,
+select,
+code,
+pre {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+}
+
 /* Force display author details on mobile */
 @media (max-width: 64em) {
   .author__urls-wrapper {

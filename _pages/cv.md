@@ -20,6 +20,8 @@ Exchange Experience
 
 Work experience
 ======
+* 2026.05 - 至今: 东吴证券量化组，实习生
+  * 参与量化策略与因子研究工作，主要负责复现量化研报中的选股因子与策略框架，对原有因子进行改进和效果评估，并结合数据特征挖掘新的 Alpha 因子。
 * Summer 2024: Research Assistant
   * GitHub University
   * Duties included: Tagging issues
