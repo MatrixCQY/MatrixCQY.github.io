@@ -52,26 +52,20 @@
   }
 }
 
-/* 必须写成 .greedy-nav .palette-switch__option 并显式复位 position/height/right：
-   layout/_navigation.scss 里有一条 `.greedy-nav button { position: absolute;
-   height: 2.5rem; right: 0; padding: 0 .5rem; background-color: …; outline: none }`
-   —— 那是给汉堡菜单那个 <button> 写的，但它是**后代选择器**，会打到这里的每个
-   选项按钮上：四个按钮全被绝对定位到右上角互相重叠，对菜单的流内高度贡献为 0
-   （实测面板整体只有 13px 高）。
-   特异性上 `.greedy-nav button` 是 (0,1,1)，只写 `.palette-switch__option`
-   是 (0,1,0) 会输，连 padding / background 也一并被它覆盖；加上 .greedy-nav
-   前缀后是 (0,2,0)，稳赢。
-   `outline: none` 同样要复位 —— 否则键盘用户看不到焦点。 */
+/* 选项是 <a>（原因见 _includes/masthead.html 的注释：<button> 会被
+   jquery.greedy-navigation.js 的 $('#site-nav button') 选中并加上 .hidden）。
+   必须写成 .greedy-nav .palette-switch__option 而不是只写类名：
+   layout/_navigation.scss 有一条 `.greedy-nav a { display: block; margin: 0 1rem;
+   padding: .5rem 0; color: … }`，特异性 (0,1,1)，会压过只写类名的 (0,1,0)。
+   加上 .greedy-nav 前缀后是 (0,2,0)，稳赢。
+   margin 必须显式归零 —— 那条规则的 `margin: 0 1rem` 我不覆盖就会生效。 */
 .greedy-nav .palette-switch__option {
-  position: static;
-  right: auto;
-  height: auto;
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
+  margin: 0;
   padding: 7px 10px;
-  border: 0;
   border-radius: $border-radius;
   background-color: transparent;
   color: var(--global-text-color);
@@ -79,6 +73,7 @@
   font-size: $type-size-6;
   line-height: 1.4;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
 
   &:hover {

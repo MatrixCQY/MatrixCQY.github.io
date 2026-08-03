@@ -35,21 +35,33 @@
               <i class="fa-solid fa-palette" aria-hidden="true" title="colour palette"></i>
             </a>
             {%- comment -%}
-              A <div role="menu"> rather than a <ul>: _sass/layout/_navigation.scss
-              sets `.visible-links li { display: table-cell }`, which matches
-              descendants, so nested <li> elements would be laid out as table
-              cells inside the dropdown.
+              Two element choices here are forced by how the surrounding
+              greedy-nav code selects things, and neither is cosmetic:
+
+              1. A <div role="menu"> rather than a <ul>, because
+                 _sass/layout/_navigation.scss sets
+                 `.visible-links li { display: table-cell }` -- a descendant
+                 selector, so nested <li> would become table cells.
+              2. <a role="menuitemradio" tabindex="0"> rather than <button>,
+                 because jquery.greedy-navigation.js caches
+                 `$btn = $('#site-nav button')` -- also a descendant selector.
+                 As <button> these options got .hidden added to them whenever
+                 the hamburger was hidden (line 52), and the hamburger's own
+                 click handler bound to them as well (line 81). Anchors are
+                 outside that selector entirely. Keyboard activation is wired
+                 up explicitly in assets/js/palette.js since an <a> with no
+                 href has none by default.
             {%- endcomment -%}
             <div class="palette-switch__menu" id="palette-menu" role="menu"
                  aria-labelledby="palette-button" hidden>
               {% for p in site.data.palettes.list %}
-                <button type="button" role="menuitemradio" aria-checked="false"
-                        class="palette-switch__option" data-palette-id="{{ p.id }}"
-                        style="--swatch-light: {{ p.swatch_light }}; --swatch-dark: {{ p.swatch_dark }};">
+                <a role="menuitemradio" tabindex="0" aria-checked="false"
+                   class="palette-switch__option" data-palette-id="{{ p.id }}"
+                   style="--swatch-light: {{ p.swatch_light }}; --swatch-dark: {{ p.swatch_dark }};">
                   <span class="palette-switch__swatch" aria-hidden="true"></span>
                   <span class="palette-switch__label">{{ p.label }}</span>
                   <span class="palette-switch__desc">{{ p.desc }}</span>
-                </button>
+                </a>
               {% endfor %}
             </div>
           </li>
