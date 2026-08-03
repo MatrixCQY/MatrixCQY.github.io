@@ -49,18 +49,33 @@
     setOpen(menu.hidden);
   });
 
+  function choose(option) {
+    var id = paletteIdOf(option);
+    root.setAttribute("data-palette", id);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, id);
+    } catch (e) {
+      /* Safari private mode: the palette still applies for this page view. */
+    }
+    markCurrent();
+    setOpen(false);
+    button.focus();
+  }
+
   Array.prototype.forEach.call(options, function (option) {
-    option.addEventListener("click", function () {
-      var id = paletteIdOf(option);
-      root.setAttribute("data-palette", id);
-      try {
-        window.localStorage.setItem(STORAGE_KEY, id);
-      } catch (e) {
-        /* Safari private mode: the palette still applies for this page view. */
+    option.addEventListener("click", function (event) {
+      event.preventDefault();
+      choose(option);
+    });
+
+    /* The options are anchors without an href -- see the comment in
+       _includes/masthead.html for why they are not <button> elements. That
+       means they get no native keyboard activation, so wire it up here. */
+    option.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " " || event.key === "Spacebar") {
+        event.preventDefault();
+        choose(option);
       }
-      markCurrent();
-      setOpen(false);
-      button.focus();
     });
   });
 
