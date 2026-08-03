@@ -1,0 +1,53 @@
+/* ==========================================================================
+   PALETTE: OKX — 极简黑白双色
+   Ported from knowledge_site docs/.vitepress/theme/styles/theme-okx.css
+
+   品牌色 = 纯黑（深色模式反转为纯白），深色模式近纯黑底。
+
+   ── 与源主题的一处刻意偏离 ──
+   源主题的浅色块**不设**任何背景/文字变量，靠回落到 VitePress 原生白底灰阶。
+   这里不能照搬：Academic Pages 的 :root 默认文字色是 $dark-gray =
+   mix(#000, #7a8288, 40%)，而 #7a8288 带明显蓝灰色偏 —— 回落过去会让
+   「极简黑白」变成「极简蓝灰」，与本主题的立意冲突。故浅色块显式写出中性灰阶。
+   ========================================================================== */
+
+/* 浅色。选择器必须带 :not([data-theme='dark'])，见 _switcher.scss 顶部的特异性说明 */
+html[data-palette='okx']:not([data-theme='dark']) {
+  --global-base-color                 : #000000;
+  --global-bg-color                   : #ffffff;
+  --global-footer-bg-color            : #f5f5f5;
+  --global-border-color               : #e5e5e5;
+  --global-dark-border-color          : #d4d4d4;
+  --global-code-background-color      : #fafafa;
+  --global-code-text-color            : #171717;
+  --global-fig-caption-color          : #737373;
+  --global-link-color                 : #000000;
+  --global-link-color-hover           : #404040;
+  --global-link-color-visited         : #525252;
+  --global-masthead-link-color        : #171717;
+  --global-masthead-link-color-hover  : #000000;
+  --global-text-color                 : #171717;
+  --global-text-color-light           : #525252;
+  --global-thead-color                : #f5f5f5;
+}
+
+/* 深色。底色取自源主题（#0a0a0a / #000000 / #161616 / #262626），
+   文字阶梯为本次新增（源主题同样依赖 VitePress 回落）。 */
+html[data-palette='okx'][data-theme='dark'] {
+  --global-base-color                 : #ffffff;
+  --global-bg-color                   : #0a0a0a;
+  --global-footer-bg-color            : #000000;
+  --global-border-color               : #262626;
+  --global-dark-border-color          : #404040;
+  --global-code-background-color      : #161616;
+  --global-code-text-color            : #ededed;
+  --global-fig-caption-color          : #a3a3a3;
+  --global-link-color                 : #ffffff;
+  --global-link-color-hover           : #bfbfbf;
+  --global-link-color-visited         : #d4d4d4;
+  --global-masthead-link-color        : #ededed;
+  --global-masthead-link-color-hover  : #ffffff;
+  --global-text-color                 : #ededed;
+  --global-text-color-light           : #a3a3a3;
+  --global-thead-color                : #161616;
+}

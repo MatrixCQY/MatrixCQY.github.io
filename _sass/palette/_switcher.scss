@@ -1,0 +1,105 @@
+/* ==========================================================================
+   PALETTE SWITCHER
+   ==========================================================================
+
+   ── 两维正交约定（改配色前必读）──
+
+   明暗是 Academic Pages 自带的一维，由 assets/js/_main.js 的 setTheme() 控制：
+     深色 -> <html data-theme="dark">
+     浅色 -> **移除该属性**（不是设成 "light"，注意）
+   配色是本站加的第二维：<html data-palette="okx|claude|vscode|solarized">。
+
+   两维正交，每个配色文件必须写成**互斥的一对**：
+
+       html[data-palette='X']:not([data-theme='dark']) { ... }   浅色
+       html[data-palette='X'][data-theme='dark']       { ... }   深色
+
+   为什么浅色块必须带 :not([data-theme='dark']) 而不是只写 [data-palette='X']：
+   CSS 特异性算的是 (id, class/attr/pseudo-class, type)。
+     - Academic Pages 的深色块 `html[data-theme="dark"]`   -> (0,1,1)
+     - 只写 `html[data-palette='X']`                        -> (0,1,1)  ← 与之平手
+   平手时胜负只看样式表里的先后顺序。本文件在 main.scss 里排在 theme/* 之后，
+   所以「只写 data-palette」会**压过**深色块：凡是配色只在浅色意图下设过的变量，
+   在深色模式下也会生效，漏出浅色配色。
+   加上 :not([data-theme='dark']) 后两块同为 (0,2,1)，稳赢 (0,1,1)，且集合互斥，
+   物理上不可能互相污染。
+
+   推论（容易踩的坑）：两块之间**不存在继承关系**。某变量只写在浅色块里，深色
+   模式下不会沿用它，而是回落到 theme/_*_dark.scss 的值。所以凡是改动的变量，
+   两块都要各写一遍——哪怕值相同。
+   ========================================================================== */
+
+/* 下拉面板锚定在 .greedy-nav（它本来就是 position: relative）而不是那个 <li>：
+   visible-links 的 li 是 display: table-cell，而 CSS 2.1 未定义 table-cell 上
+   position: relative 的行为（现代浏览器都实现了，但没必要押这一注）。
+   切换器本来就是导航最右一项，锚在 nav 上的 right:0 视觉结果完全一致。 */
+.greedy-nav .palette-switch__menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 30;
+  min-width: 232px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background-color: var(--global-bg-color);
+  border: 1px solid var(--global-dark-border-color);
+  border-radius: $border-radius;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.palette-switch__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: $border-radius;
+  background: transparent;
+  color: var(--global-text-color);
+  font-family: $global-font-family;
+  font-size: $type-size-6;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--global-footer-bg-color);
+  }
+
+  &[aria-checked="true"] {
+    color: var(--global-base-color);
+    font-weight: bold;
+  }
+}
+
+/* 双色圆点：左半 = 该配色浅色模式主色，右半 = 深色模式主色。
+   只是菜单里的预览，不参与实际配色计算。 */
+.palette-switch__swatch {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--global-dark-border-color);
+  border-radius: 50%;
+  background-image: linear-gradient(
+    to right,
+    var(--swatch-light) 0 50%,
+    var(--swatch-dark) 50% 100%
+  );
+}
+
+.palette-switch__label {
+  flex: 0 0 auto;
+}
+
+.palette-switch__desc {
+  flex: 1 1 auto;
+  color: var(--global-text-color-light);
+  font-size: $type-size-7;
+  text-align: right;
+}

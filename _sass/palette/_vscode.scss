@@ -1,0 +1,58 @@
+/* ==========================================================================
+   PALETTE: VS Code — 现行默认配色 Dark Modern / Light Modern
+   Ported from knowledge_site docs/.vitepress/theme/styles/theme-vscode.css
+
+   ✅ 色值来源：microsoft/vscode 主干分支的官方主题定义，逐条 grep 出来：
+        extensions/theme-defaults/themes/dark_modern.json
+        extensions/theme-defaults/themes/light_modern.json
+   注意这是**现行**默认主题（1.72+ 起 Dark/Light Modern 取代了老的 Dark+/Light+）：
+   现在是 Fluent 蓝 #0078D4 与 #1F1F1F / #181818 的双层灰，不再是 #007ACC / #1E1E1E。
+
+   ── 与源主题的一处补充 ──
+   VS Code 的 token 表里没有「链接 hover」和「已访问链接」这两个语义，
+   源主题也就没定义。这里的 hover / visited 是本次新增：浅色向暗（#004a8f）、
+   深色向亮（#7cc0ff），两个方向都是朝对比度更高的一侧走。
+   ========================================================================== */
+
+/* 浅色：Light Modern。注释里标的是该值在 VS Code 里的 workbench color token 原名。 */
+html[data-palette='vscode']:not([data-theme='dark']) {
+  --global-base-color                 : #005fb8;  /* textLink.foreground */
+  --global-bg-color                   : #ffffff;  /* editor.background */
+  --global-footer-bg-color            : #f8f8f8;  /* sideBar.background */
+  --global-border-color               : #e5e5e5;  /* panel.border */
+  --global-dark-border-color          : #cecece;
+  --global-code-background-color      : #f8f8f8;
+  --global-code-text-color            : #3b3b3b;  /* editor.foreground */
+  --global-fig-caption-color          : #6e7681;  /* editorLineNumber.foreground */
+  --global-link-color                 : #005fb8;
+  --global-link-color-hover           : #004a8f;
+  --global-link-color-visited         : #0258a8;  /* button.hoverBackground */
+  --global-masthead-link-color        : #3b3b3b;
+  --global-masthead-link-color-hover  : #005fb8;
+  --global-text-color                 : #3b3b3b;
+  --global-text-color-light           : #616161;
+  --global-thead-color                : #f8f8f8;  /* editorWidget.background */
+}
+
+/* 深色：Dark Modern */
+html[data-palette='vscode'][data-theme='dark'] {
+  --global-base-color                 : #4daafc;  /* textLink.foreground */
+  --global-bg-color                   : #1f1f1f;  /* editor.background */
+  --global-footer-bg-color            : #181818;  /* sideBar / activityBar / statusBar */
+  --global-border-color               : #2b2b2b;  /* panel.border */
+  --global-dark-border-color          : #313131;  /* widget.border */
+  --global-code-background-color      : #181818;
+  --global-code-text-color            : #cccccc;  /* editor.foreground */
+  /* 图注不用 editorLineNumber #6e7681：它在 #1f1f1f 上仅 3.59:1，行号是扫视用的
+     短数字，正文尺寸的图注不该踩这个线。改用 descriptionForeground（6.08 ✓），
+     同为官方 token。浅色下 #6e7681 有 4.59:1，故浅色块保留原 token。 */
+  --global-fig-caption-color          : #9d9d9d;  /* descriptionForeground */
+  --global-link-color                 : #4daafc;
+  --global-link-color-hover           : #7cc0ff;
+  --global-link-color-visited         : #9dd0ff;
+  --global-masthead-link-color        : #cccccc;
+  --global-masthead-link-color-hover  : #4daafc;
+  --global-text-color                 : #cccccc;
+  --global-text-color-light           : #9d9d9d;  /* descriptionForeground */
+  --global-thead-color                : #202020;  /* editorWidget.background */
+}
