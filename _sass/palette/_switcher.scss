@@ -52,7 +52,20 @@
   }
 }
 
-.palette-switch__option {
+/* 必须写成 .greedy-nav .palette-switch__option 并显式复位 position/height/right：
+   layout/_navigation.scss 里有一条 `.greedy-nav button { position: absolute;
+   height: 2.5rem; right: 0; padding: 0 .5rem; background-color: …; outline: none }`
+   —— 那是给汉堡菜单那个 <button> 写的，但它是**后代选择器**，会打到这里的每个
+   选项按钮上：四个按钮全被绝对定位到右上角互相重叠，对菜单的流内高度贡献为 0
+   （实测面板整体只有 13px 高）。
+   特异性上 `.greedy-nav button` 是 (0,1,1)，只写 `.palette-switch__option`
+   是 (0,1,0) 会输，连 padding / background 也一并被它覆盖；加上 .greedy-nav
+   前缀后是 (0,2,0)，稳赢。
+   `outline: none` 同样要复位 —— 否则键盘用户看不到焦点。 */
+.greedy-nav .palette-switch__option {
+  position: static;
+  right: auto;
+  height: auto;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -60,16 +73,22 @@
   padding: 7px 10px;
   border: 0;
   border-radius: $border-radius;
-  background: transparent;
+  background-color: transparent;
   color: var(--global-text-color);
   font-family: $global-font-family;
   font-size: $type-size-6;
+  line-height: 1.4;
   text-align: left;
   cursor: pointer;
 
-  &:hover,
+  &:hover {
+    background-color: var(--global-footer-bg-color);
+  }
+
   &:focus-visible {
     background-color: var(--global-footer-bg-color);
+    outline: 2px solid var(--global-base-color);
+    outline-offset: -2px;
   }
 
   &[aria-checked="true"] {
