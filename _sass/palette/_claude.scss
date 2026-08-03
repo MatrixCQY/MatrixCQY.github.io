@@ -1,0 +1,54 @@
+/* ==========================================================================
+   PALETTE: Claude — 暖纸底 + 陶土橙
+   Ported from knowledge_site docs/.vitepress/theme/styles/theme-claude.css
+
+   ⚠️ 色值来源声明（沿用源主题的声明）：hex 是照 claude.ai 视觉观感还原的
+   **近似值**，不是 Anthropic 官方 brand token，不要当成品牌规范引用。
+
+   ── 与源主题的一处刻意偏离 ──
+   源主题把 --vp-c-brand-2（#c96a45，比正常态更亮）当链接 hover。搬到这里改用
+   #9a4527（源主题的 button hover 值，比正常态更暗）：Academic Pages 的
+   --global-link-color-hover 是正文链接的 hover 态，更暗 = 对比度更高，且与
+   Academic Pages 自身 mix(#000, …, 25%) 的约定一致。亮向 hover 会把
+   4.76:1 拉低到 3.6 左右。
+   ========================================================================== */
+
+/* 浅色：暖纸 */
+html[data-palette='claude']:not([data-theme='dark']) {
+  --global-base-color                 : #b0522f;
+  --global-bg-color                   : #faf9f5;
+  --global-footer-bg-color            : #f0eee6;
+  --global-border-color               : #e3dfd5;
+  --global-dark-border-color          : #d5d0c3;
+  --global-code-background-color      : #f0eee6;
+  --global-code-text-color            : #1f1e1d;
+  --global-fig-caption-color          : #726f68;
+  --global-link-color                 : #b0522f;
+  --global-link-color-hover           : #9a4527;
+  --global-link-color-visited         : #86391f;
+  --global-masthead-link-color        : #1f1e1d;
+  --global-masthead-link-color-hover  : #b0522f;
+  --global-text-color                 : #1f1e1d;
+  --global-text-color-light           : #4a4741;
+  --global-thead-color                : #f5f3ec;
+}
+
+/* 深色：暖炭。底色刻意不是中性 #1b1b1f 而是偏暖的 #262624。 */
+html[data-palette='claude'][data-theme='dark'] {
+  --global-base-color                 : #e4886a;
+  --global-bg-color                   : #262624;
+  --global-footer-bg-color            : #1f1e1d;
+  --global-border-color               : #3e3e3a;
+  --global-dark-border-color          : #4a4a45;
+  --global-code-background-color      : #1f1e1d;
+  --global-code-text-color            : #f5f4ee;
+  --global-fig-caption-color          : #8f8d84;
+  --global-link-color                 : #e4886a;
+  --global-link-color-hover           : #f0a186;
+  --global-link-color-visited         : #d97757;
+  --global-masthead-link-color        : #f5f4ee;
+  --global-masthead-link-color-hover  : #e4886a;
+  --global-text-color                 : #f5f4ee;
+  --global-text-color-light           : #c2c0b6;
+  --global-thead-color                : #30302e;
+}

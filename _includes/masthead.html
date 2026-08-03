@@ -21,6 +21,38 @@
           <li id="theme-toggle" class="masthead__menu-item persist tail">
             <a role="button" aria-labelledby="theme-icon"><i id="theme-icon" class="fa-solid fa-sun" aria-hidden="true" title="toggle theme"></i></a>
           </li>
+          {%- comment -%}
+            Palette switcher. Deliberately "persist" WITHOUT "tail":
+            jquery.greedy-navigation.js caches `.persist.tail` as a single
+            insertion anchor and calls insertBefore() on it, so a second
+            .persist.tail would make jQuery clone each restored nav item into
+            both positions. It also sits after #theme-toggle so restored links
+            land to the left of both controls. Registry: _data/palettes.yml
+          {%- endcomment -%}
+          <li id="palette-switch" class="masthead__menu-item palette-switch persist">
+            <a role="button" id="palette-button" aria-haspopup="true" aria-expanded="false"
+               aria-controls="palette-menu" aria-label="Change colour palette">
+              <i class="fa-solid fa-palette" aria-hidden="true" title="colour palette"></i>
+            </a>
+            {%- comment -%}
+              A <div role="menu"> rather than a <ul>: _sass/layout/_navigation.scss
+              sets `.visible-links li { display: table-cell }`, which matches
+              descendants, so nested <li> elements would be laid out as table
+              cells inside the dropdown.
+            {%- endcomment -%}
+            <div class="palette-switch__menu" id="palette-menu" role="menu"
+                 aria-labelledby="palette-button" hidden>
+              {% for p in site.data.palettes.list %}
+                <button type="button" role="menuitemradio" aria-checked="false"
+                        class="palette-switch__option" data-palette-id="{{ p.id }}"
+                        style="--swatch-light: {{ p.swatch_light }}; --swatch-dark: {{ p.swatch_dark }};">
+                  <span class="palette-switch__swatch" aria-hidden="true"></span>
+                  <span class="palette-switch__label">{{ p.label }}</span>
+                  <span class="palette-switch__desc">{{ p.desc }}</span>
+                </button>
+              {% endfor %}
+            </div>
+          </li>
         </ul>
         <ul class="hidden-links hidden"></ul>
       </nav>

@@ -8,12 +8,24 @@
    sorted by the dependencies. Also, the first two lines of the file are required by Jekyll.
  */
 
+/*
+ * palette/* is an orthogonal second dimension layered on top of light/dark.
+ * It MUST be imported after theme/* so its selectors win on source order as
+ * well as on specificity — see palette/_switcher.scss for the full contract.
+ * There is no auto-glob: the palette list stays visible here on purpose.
+ */
+
 @import
     "vendor/breakpoint/breakpoint",
 
     "themes",
     "theme/{{ site.site_theme | default: 'default' | append: '_light' }}",
     "theme/{{ site.site_theme | default: 'default' | append: '_dark' }}",
+
+    "palette/okx",
+    "palette/claude",
+    "palette/vscode",
+    "palette/solarized",
 
     "include/mixins",
     "vendor/susy/susy",
@@ -27,6 +39,7 @@
     "layout/notices",
     "layout/masthead",
     "layout/navigation",
+    "palette/switcher",
     "layout/footer",
     "syntax",
 

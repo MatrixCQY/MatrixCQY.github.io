@@ -1,0 +1,48 @@
+# Site palette registry
+#
+# Single source of truth, consumed in three places:
+#   1. _includes/head/custom.html -> the anti-flicker init script (needs the id
+#      whitelist and the default, so an unknown stored value can't be applied)
+#   2. _includes/masthead.html    -> renders the switcher menu server-side
+#   3. _sass/palette/_<id>.scss   -> one file per id (a convention, NOT an
+#      automatic association)
+#
+# Adding a palette takes three steps, all required:
+#   1. add an entry here (id in kebab-case)
+#   2. create _sass/palette/_<id>.scss, following the paired-block contract
+#      documented at the top of _sass/palette/_switcher.scss
+#   3. @import it in assets/css/main.scss
+# There is no auto-glob. That is deliberate: it keeps the palette list visible
+# in the source rather than implied by the filesystem.
+#
+# `label` and `desc` are rendered on the page, so they must be in English.
+# `swatch_light` / `swatch_dark` are the two halves of the preview dot in the
+# menu. They are preview only and do not participate in the actual colour
+# computation -- editing them does not change the palette.
+
+default: okx
+
+list:
+  - id: okx
+    label: "OKX"
+    desc: "Minimal black & white"
+    swatch_light: "#000000"
+    swatch_dark: "#ffffff"
+
+  - id: claude
+    label: "Claude"
+    desc: "Warm paper, clay orange"
+    swatch_light: "#b0522f"
+    swatch_dark: "#e4886a"
+
+  - id: vscode
+    label: "VS Code"
+    desc: "Dark / Light Modern"
+    swatch_light: "#005fb8"
+    swatch_dark: "#4daafc"
+
+  - id: solarized
+    label: "Solarized"
+    desc: "Schoonover's 16-colour classic"
+    swatch_light: "#268bd2"
+    swatch_dark: "#268bd2"

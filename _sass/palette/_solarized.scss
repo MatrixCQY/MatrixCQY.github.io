@@ -1,0 +1,87 @@
+/* ==========================================================================
+   PALETTE: Solarized — Ethan Schoonover 的经典 16 色方案
+   Ported from knowledge_site docs/.vitepress/theme/styles/theme-solarized.css
+
+   ✅ 色值来源：Solarized 官方 spec 的固定 16 色，与 microsoft/vscode 主干里的
+      extensions/theme-solarized-{dark,light}/ 逐条核对一致。
+
+   这套配色的设计前提值得知道：它不是「挑好看的颜色」，而是先在 CIELAB 里固定
+   明度关系再反解 sRGB —— 8 个 base 色构成一条对称的明度阶梯，明色与暗色模式
+   复用同一批 accent，靠**翻转 base 阶梯**而非换色来切换明暗。所以下面浅/深
+   两块的 accent 完全相同，只有 base 在镜像对调。
+
+     base03 #002b36  base02 #073642  base01 #586e75  base00 #657b83
+     base0  #839496  base1  #93a1a1  base2  #eee8d5  base3  #fdf6e3
+     yellow #b58900  orange #cb4b16  red    #dc322f  magenta #d33682
+     violet #6c71c4  blue   #268bd2  cyan   #2aa198  green   #859900
+
+   ── 沿用源主题的一个取舍（重要）──
+   accent 蓝 #268bd2 在浅色下 3.41:1、深色下 4.08:1，**均低于 WCAG AA 正文
+   门槛 4.5**。源主题选择保真而非改色（Solarized 的辨识度就在这支蓝上），这里
+   照搬该决定。若更看重可读性，把两块的 --global-link-color / --global-base-color
+   换成 cyan #2aa198（深色下 4.75:1 ✓）即可，其余变量不用动。
+
+   这个取舍的范围比源主题写的更大，实测过全部 16 色（对 base3 浅底）：
+     base03 13.92 / base02 12.05 / base01 4.99 —— 只有这三支过 4.5；
+     red 4.29 · orange 4.27 · magenta 4.21 · base00 4.13 · violet 4.06 ·
+     blue 3.41 · yellow 2.98 · green 2.97 · cyan 2.93 —— **每一支 accent 都不过**。
+   这是方案的固有属性，不是配色没调好：Solarized 的 accent 是在 CIELAB 里按
+   感知等价设计的，本来就不以 WCAG 比值为约束。所以本文件的所有 accent 一律
+   保真，统一按 AA-large 对待；只修两类不属于该取舍范围的值（见下）。
+
+   ── 相对源主题修正的两处（都不是 accent 保真问题）──
+   1. 浅色 link hover：源主题用 cyan #2aa198，实测 2.93:1 —— **比常态 blue 的
+      3.41 还低**。hover 不该降对比度，改用 base01 #586e75（4.99 ✓）。这也正是
+      源主题自己在按钮上的做法（「按钮底改用更暗的 base01…蓝色留给链接」），
+      且与 Academic Pages mix(#000, …, 25%) 的变暗约定一致。
+      深色 hover 保留 cyan：4.75:1，相对 blue 的 4.08 是提升，无需改。
+   2. 图注：源主题的 base1 在浅底上仅 2.48:1，深色的 base00 仅 3.37:1，都不可用。
+      两块统一改用「次要文字」那一档（浅 base00 4.13 / 深 base0 4.75）。
+      代价是图注与次要文字同色，少一级层次 —— Solarized 没有第三档能过线的中间调。
+
+   ── 与源主题的一处补充 ──
+   visited 链接用 violet #6c71c4（浅 4.06 / 深 3.43，AA-large）—— 这是 Solarized
+   16 色里本来就有的一支，比自造混色更符合该方案「只用固定调色板」的前提。
+   ========================================================================== */
+
+/* 浅色：base3 系纸底 */
+html[data-palette='solarized']:not([data-theme='dark']) {
+  --global-base-color                 : #268bd2;  /* blue */
+  --global-bg-color                   : #fdf6e3;  /* base3 */
+  --global-footer-bg-color            : #eee8d5;  /* base2 */
+  --global-border-color               : #ddd6c1;
+  --global-dark-border-color          : #cfc9b4;
+  --global-code-background-color      : #eee8d5;  /* base2 */
+  --global-code-text-color            : #586e75;  /* base01 */
+  --global-fig-caption-color          : #657b83;  /* base00（base1 仅 2.48:1，不可用） */
+  --global-link-color                 : #268bd2;  /* blue */
+  --global-link-color-hover           : #586e75;  /* base01（cyan 仅 2.93:1，低于常态） */
+  --global-link-color-visited         : #6c71c4;  /* violet */
+  /* 正文用 base01「强调文本」而非 spec 的正文 base00 —— 后者实测 4.13:1，
+     长文阅读不该踩线；base01 实测 4.99:1。 */
+  --global-masthead-link-color        : #586e75;  /* base01 */
+  --global-masthead-link-color-hover  : #268bd2;
+  --global-text-color                 : #586e75;  /* base01 */
+  --global-text-color-light           : #657b83;  /* base00 */
+  --global-thead-color                : #eee8d5;  /* base2 */
+}
+
+/* 深色：base03 系墨底（base 阶梯整体镜像，accent 不变） */
+html[data-palette='solarized'][data-theme='dark'] {
+  --global-base-color                 : #268bd2;  /* blue，与浅色同一支——Solarized 的设计核心 */
+  --global-bg-color                   : #002b36;  /* base03 */
+  --global-footer-bg-color            : #00212b;  /* vscode 主题里 sideBar 用的更暗一档 */
+  --global-border-color               : #073642;  /* base02 */
+  --global-dark-border-color          : #12495a;
+  --global-code-background-color      : #00212b;
+  --global-code-text-color            : #93a1a1;  /* base1 */
+  --global-fig-caption-color          : #839496;  /* base0（base00 仅 3.37:1，不可用） */
+  --global-link-color                 : #268bd2;  /* blue */
+  --global-link-color-hover           : #2aa198;  /* cyan */
+  --global-link-color-visited         : #6c71c4;  /* violet */
+  --global-masthead-link-color        : #93a1a1;  /* base1 */
+  --global-masthead-link-color-hover  : #268bd2;
+  --global-text-color                 : #93a1a1;  /* base1 */
+  --global-text-color-light           : #839496;  /* base0 */
+  --global-thead-color                : #073642;  /* base02 */
+}

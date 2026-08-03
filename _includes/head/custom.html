@@ -14,4 +14,26 @@
 <link rel="icon" href="/images/favicon.ico"/>
 <meta name="theme-color" content="#ffffff"/>
 
+<!-- Colour palette: applied before the first paint so there is no flash of the
+     default palette. Kept inline and render-blocking on purpose -- an external
+     or deferred script necessarily runs after the first paint. The id
+     whitelist means a stale or hand-edited localStorage value cannot put the
+     document into a palette that has no stylesheet. Registry: _data/palettes.yml -->
+<script>
+  (function () {
+    var VALID = [{% for p in site.data.palettes.list %}"{{ p.id }}"{% unless forloop.last %}, {% endunless %}{% endfor %}];
+    var FALLBACK = "{{ site.data.palettes.default }}";
+    var stored = null;
+    try {
+      stored = window.localStorage.getItem("site-palette");
+    } catch (e) {
+      /* Safari private mode throws on localStorage access; fall back silently. */
+    }
+    document.documentElement.setAttribute(
+      "data-palette",
+      VALID.indexOf(stored) !== -1 ? stored : FALLBACK
+    );
+  })();
+</script>
+
 <!-- end custom head snippets -->
