@@ -1,6 +1,6 @@
 ---
 title: "factor_lab — A Reproducibility Framework for Published Equity Factors"
-excerpt: "An independent factor-research stack built to answer one question: how many published sell-side equity factors survive a careful replication and a proper multiple-testing correction? Includes a live 27-panel factor dashboard."
+excerpt: "An independent factor-research stack built to answer one question: how many published sell-side equity factors survive a careful replication and a proper multiple-testing correction? Includes a live 28-panel factor dashboard."
 collection: portfolio
 ---
 
@@ -10,7 +10,7 @@ collection: portfolio
 
 This is the domestic-market analogue of the replication literature — Harvey, Liu & Zhu (2016), *…and the Cross-Section of Expected Returns*; Hou, Xue & Zhang (2020), *Replicating Anomalies* — applied to Chinese A-shares. Answering it honestly requires building the whole pipeline, because the answer is extremely sensitive to details that summary tables never report: point-in-time discipline, the neutralisation scheme, transaction costs, and how many candidates were searched before the winner was chosen.
 
-**[→ Open a live factor dashboard](/files/factor-lab/htsc_turn_1m.html)** — 27 panels for a single factor, self-contained HTML, light/dark aware, with CSV and PNG export.
+**[→ Open a live factor dashboard](/files/factor-lab/htsc_turn_1m.html)** — 28 panels for a single factor, self-contained HTML, light/dark aware, with CSV export, PNG export and an A4 print stylesheet.
 
 ---
 
@@ -79,7 +79,7 @@ Every replicated factor gets a **self-contained HTML dashboard** — no CDN, no 
 
 **[→ 1-Month Average Turnover · factor dashboard](/files/factor-lab/htsc_turn_1m.html)**
 
-27 panels, grouped so the page can be skimmed top-down. Beyond the usual layered net-value curve and IC series, the panels that exist specifically to *attack* the factor are:
+28 panels in five groups, so the page can be skimmed top-down. Beyond the usual layered net-value curve and IC series, the panels that exist specifically to *attack* the factor are:
 
 | Panel | The question it is designed to answer |
 | :--- | :--- |
