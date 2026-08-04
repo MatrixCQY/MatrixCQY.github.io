@@ -14,7 +14,7 @@ My work is in **systematic alpha research**. I build and evaluate factors on Chi
 - **Factor construction** — time-series momentum and carry factor families, multi-window signals with volatility normalisation, cross-sectional standardisation and sector neutralisation.
 - **Factor evaluation** — full IC / ICIR / quantile-monotonicity / half-life diagnostics rather than a single headline Sharpe ratio.
 - **Machine learning for factor mining** — GBDT and LSTM/GRU models over technical-indicator feature matrices, with triple-barrier labelling and time-series cross-validation to rule out label leakage.
-- **Replication and multiple testing** — my main project, [factor_lab](/portfolio/factor-lab-reproducibility/), is an independent research stack built to ask how many published equity factors survive a careful replication *and* a Deflated Sharpe Ratio correction. In the pilot batch, 22 of 24 factors cleared FDR control and none cleared DSR.
+- **Replication and multiple testing** — my main project, [factor_lab](/portfolio/factor-lab-reproducibility/), is an independent research stack built to ask how many published equity factors survive a careful replication *and* a Deflated Sharpe Ratio correction. Across the 35 factors replicated so far, 33 cleared FDR control and none cleared DSR.
 
 My broader interests are in statistics, financial machine learning, and the parts of market microstructure that decide whether a paper signal survives contact with execution.
 
