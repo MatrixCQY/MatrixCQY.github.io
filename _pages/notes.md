@@ -11,8 +11,8 @@ author_profile: true
 ## PDF Notes
 - [FAHW Note (Notion)](https://www.notion.so/FA-3071bedeb15f80fabf93f97c2b4a11ca?source=copy_link)
 
-## Knowledge Base
-[https://matrixcqy.org/](https://matrixcqy.org/) (private, sign-in required)
+## Lecture Notes
+- [Machine Learning (Fudan University)](https://matrixcqy.org/tex/ml-fdu-claude/) — 10 chapters, written in Chinese
 
 {% include base_path %}
 {% for post in site.posts %}
