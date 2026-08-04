@@ -75,9 +75,11 @@ Two further findings:
 
 ## 5. The Factor Dashboard
 
-Every replicated factor gets a **self-contained HTML dashboard** — no CDN, no build step, no server. The linked example is the turnover factor from Huatai Securities' single-factor test series (2017-01-09), reproduced independently:
+Every replicated factor gets a **self-contained HTML dashboard** — no CDN, no build step, no server. The linked examples are the turnover factor from Huatai Securities' single-factor test series (2017-01-09) and a candlestick upper-shadow factor from Soochow Securities' technical-analysis series (2020-06-19), both reproduced independently:
 
 **[→ 1-Month Average Turnover · factor dashboard](/files/factor-lab/htsc_turn_1m.html)**
+
+**[→ Candlestick Upper-Shadow Std Dev · factor dashboard](/files/factor-lab/dwzq_candle_up_std.html)**
 
 28 panels in five groups, so the page can be skimmed top-down. Beyond the usual layered net-value curve and IC series, the panels that exist specifically to *attack* the factor are:
 
@@ -96,7 +98,7 @@ Every replicated factor gets a **self-contained HTML dashboard** — no CDN, no 
 
 Implementation details that keep the numbers honest: the factor is computed at the T close and returns accrue from T+1; missing values are never filled, they drop out of the universe; the Newey–West bandwidth is set automatically (L = 4) and the naive t-statistic is never quoted.
 
-**On consistency with the scorecard.** The dashboard and the reconciliation table run the same code but not the same window: the dashboard uses the full available sample (2010-03-31 – 2026-02-27, 192 monthly rebalances) while the batch scorecard is restricted to the common 144-month window so that factors are compared against each other on identical data. The performance figures therefore differ by design — this factor shows +14.6% annualised long–short on the dashboard versus +8.62% in the batch table. The **multiple-testing statistics (BH-FDR *q*, DSR) are not recomputed on the dashboard**; they are imported from the batch scorecard, because a selection-bias correction is only meaningful relative to the full set of trials it was drawn from.
+**On consistency with the scorecard.** The dashboard and the reconciliation table run the same code but not the same window: the dashboard uses the full available sample (2010-03-31 – 2026-02-27, 192 monthly rebalances) while the batch scorecard is restricted to the common 144-month window so that factors are compared against each other on identical data. The performance figures therefore differ by design — the turnover factor shows +14.6% annualised long–short on the dashboard versus +8.62% in the batch table. The **multiple-testing statistics (BH-FDR *q*, DSR) are not recomputed on the dashboard**; they are imported from the batch scorecard, because a selection-bias correction is only meaningful relative to the full set of trials it was drawn from.
 
 ## 6. Known Limitations
 
