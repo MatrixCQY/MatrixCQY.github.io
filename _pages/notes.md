@@ -11,6 +11,9 @@ author_profile: true
 ## PDF Notes
 - [FAHW Note (Notion)](https://www.notion.so/FA-3071bedeb15f80fabf93f97c2b4a11ca?source=copy_link)
 
+## Knowledge Base
+[https://matrixcqy.org/](https://matrixcqy.org/) (private, sign-in required)
+
 {% include base_path %}
 {% for post in site.posts %}
   {% include archive-single.html %}
