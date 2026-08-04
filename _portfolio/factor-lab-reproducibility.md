@@ -75,11 +75,15 @@ Two further findings:
 
 ## 5. The Factor Dashboard
 
-Every replicated factor gets a **self-contained HTML dashboard** — no CDN, no build step, no server. The linked examples are the turnover factor from Huatai Securities' single-factor test series (2017-01-09) and a candlestick upper-shadow factor from Soochow Securities' technical-analysis series (2020-06-19), both reproduced independently:
+Every replicated factor gets a **self-contained HTML dashboard** — no CDN, no build step, no server. The linked examples are the turnover factor from Huatai Securities' single-factor test series (2017-01-09), a candlestick upper-shadow factor from Soochow Securities' technical-analysis series (2020-06-19), and an intraday turnover-uniformity factor from the same Soochow series (2021-03-01), all reproduced independently:
 
 **[→ 1-Month Average Turnover · factor dashboard](/files/factor-lab/htsc_turn_1m.html)**
 
 **[→ Candlestick Upper-Shadow Std Dev · factor dashboard](/files/factor-lab/dwzq_candle_up_std.html)**
+
+**[→ Turnover-Distribution Uniformity (minute-bar) · factor dashboard](/files/factor-lab/dwzq_utd.html)**
+
+The third one doubles as a worked example of Section 4's headline finding: NW *t* = 8.91 on RankIC (nowhere near a fluke), yet the 20 bp long–short annualises at only +1.6% and DSR = 0.000 — a factor that is statistically real and economically dead, the two questions the dashboard is built to keep separate.
 
 28 panels in five groups, so the page can be skimmed top-down. Beyond the usual layered net-value curve and IC series, the panels that exist specifically to *attack* the factor are:
 
