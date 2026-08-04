@@ -76,16 +76,46 @@ pre {
   user-select: text;
 }
 
-/* Force display author details on mobile */
+/* Force display author details on mobile.
+ *
+ * Below $large, layout/_sidebar.scss renders .author__urls as a popover that
+ * the "Follow" button toggles: position:absolute, right:0, its own border,
+ * background, shadow, a caret drawn with :before/:after, and z-index:-1.
+ * Un-hiding it with display:block alone leaves all of that in place, so the
+ * list stays out of normal flow — its wrapper collapses to 0px while the list
+ * itself is ~110px tall, and those 110px sit on top of whatever follows
+ * (z-index:-1 puts it *under* the content, so it is both covering and
+ * unclickable). Hiding the button then leaves no way to dismiss it.
+ *
+ * So the popover has to be dismantled, not merely revealed: the rules below
+ * reproduce what the $large breakpoint already does to this element — put it
+ * back in flow and strip the popover chrome. */
 @media (max-width: 64em) {
   .author__urls-wrapper {
     display: block !important;
   }
-  .author__urls.social-icons {
-    display: block !important;
-  }
-  /* Hide the "Follow" button since content is always visible */
+
+  /* No button, so nothing would ever toggle the popover open. */
   .author__urls-wrapper button {
     display: none !important;
+  }
+
+  .author__urls.social-icons {
+    display: block !important;
+    position: relative; /* was absolute — this is the fix for the overlay */
+    right: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    z-index: auto;
+  }
+
+  /* The caret pointed at the button that no longer exists. */
+  .author__urls.social-icons:before,
+  .author__urls.social-icons:after {
+    display: none;
   }
 }
