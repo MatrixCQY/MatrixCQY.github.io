@@ -8,6 +8,7 @@
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 .viz-root {
+  position: relative;
   color-scheme: light;
   --surface-1:#fcfcfb; --page:#f9f9f7;
   --ink-1:#0b0b0b; --ink-2:#52514e; --ink-3:#898781;
@@ -232,8 +233,16 @@ button.act:hover { color:var(--ink-1); border-color:var(--ink-3); }
 }
 button.act[data-on="1"] { color:var(--ink-1); border-color:var(--ink-1);
   font-weight:600; }
+/* 水印: 平铺对角文字, ink-3 在明暗主题下同色 (见上 --ink-3 定义), 故直接烘焙进 SVG
+   而不必走 CSS 变量; pointer-events:none 保证不挡工具栏/图表交互, 且随内容滚动
+   (position:absolute 而非 fixed), html2canvas 导出 PNG 时会一并渲染进去。 */
+.watermark {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background-repeat: repeat;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='180'><text x='0' y='110' transform='rotate(-28 130 90)' font-family='system-ui,-apple-system,Segoe UI,Microsoft YaHei,sans-serif' font-size='22' letter-spacing='1' fill='rgba(137,135,129,0.16)'>matrixcqy</text></svg>");
+}
 </style>
-<div class="viz-root"><div class="wrap">
+<div class="viz-root"><div class="watermark" aria-hidden="true"></div><div class="wrap">
 <h1>1个月日均换手率 <span style="color:var(--ink-3);font-weight:400;font-size:15px">
 turn_1m · htsc_turn_1m</span></h1>
 <div class="sub">换手 / 换手率水平 ·
