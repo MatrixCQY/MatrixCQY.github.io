@@ -1,6 +1,6 @@
 ---
 title: "factor_lab — A Reproducibility Framework for Published Equity Factors"
-excerpt: "An independent factor-research stack built to answer one question: how many published sell-side equity factors survive a careful replication and a proper multiple-testing correction? Includes a live 28-panel factor dashboard."
+excerpt: "An independent factor-research stack built to answer one question: how many published sell-side equity factors survive a careful replication and a proper multiple-testing correction? Includes a live 29-panel factor dashboard."
 collection: portfolio
 ---
 
@@ -10,7 +10,7 @@ collection: portfolio
 
 This is the domestic-market analogue of the replication literature — Harvey, Liu & Zhu (2016), *…and the Cross-Section of Expected Returns*; Hou, Xue & Zhang (2020), *Replicating Anomalies* — applied to Chinese A-shares. Answering it honestly requires building the whole pipeline, because the answer is extremely sensitive to details that summary tables never report: point-in-time discipline, the neutralisation scheme, transaction costs, and how many candidates were searched before the winner was chosen.
 
-**[→ Open a live factor dashboard](/files/factor-lab/htsc_turn_1m.html)** — 28 panels for a single factor, self-contained HTML, light/dark aware, with CSV export, PNG export and an A4 print stylesheet.
+**[→ Open a live factor dashboard](/files/factor-lab/htsc_turn_1m.html)** — 29 panels for a single factor, self-contained HTML, light/dark aware, with CSV export, PNG export and an A4 print stylesheet.
 
 ---
 
@@ -85,11 +85,11 @@ Every replicated factor gets a **self-contained HTML dashboard** — no CDN, no 
 
 The third one doubles as a worked example of Section 4's headline finding: NW *t* = 8.91 on RankIC (nowhere near a fluke), yet the 20 bp long–short annualises at only +1.6% and DSR = 0.000 — a factor that is statistically real and economically dead, the two questions the dashboard is built to keep separate.
 
-28 panels in five groups, so the page can be skimmed top-down. Beyond the usual layered net-value curve and IC series, the panels that exist specifically to *attack* the factor are:
+Up to 29 panels in five groups, so the page can be skimmed top-down — the replication-vs-published reconciliation panel renders only for the factors whose source report gave a comparable headline number, which is why the turnover-uniformity dashboard above shows 28. Beyond the usual layered net-value curve and IC series, the panels that exist specifically to *attack* the factor are:
 
 | Panel | The question it is designed to answer |
 | :--- | :--- |
-| **Long-only vs benchmark** | A-share short selling is heavily constrained, so a long–short Sharpe is not an implementable result. The benchmark is the **selection universe equal-weighted, rebalanced by the same engine** — not a cap-weighted index, which would confound the factor with an equal-weight premium. |
+| **Long-only vs benchmark** | A-share short selling is heavily constrained, so a long–short Sharpe is not an implementable result. The benchmark is the **selection universe equal-weighted, rebalanced by the same engine** — not a cap-weighted index, which would confound the factor with an equal-weight premium. A companion panel re-runs the excess return against alternative benchmarks, because "beats the benchmark" is only meaningful if the answer survives changing it. |
 | **Parameter plateau** | Does performance survive in a neighbourhood of the chosen lookback, or is it a lone peak? A lone peak is overfitting. |
 | **Cost sensitivity and breakeven** | At what one-way cost does the strategy stop paying? A factor with 2.45× monthly two-way turnover lives or dies on this number. |
 | **Neutralisation ladder** | Market-cap 1st/2nd/3rd order versus full Barra style — how much of the signal is just size? |
