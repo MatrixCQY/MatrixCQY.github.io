@@ -55,7 +55,7 @@ Numerical claims are held to a tolerance rather than an eyeball: the WLS neutral
 
 ## 4. The Result That Matters
 
-Two batches replicated so far — **35 factors**, all-A universe, monthly rebalancing, 20 bp one-way cost, with the preprocessing pipeline stated in the source reports (MAD winsorisation → industry and style neutralisation via √market-cap WLS → z-score):
+Two batches replicated so far — **35 factors**, all-A universe, monthly rebalancing, 20 bp one-way cost, with the preprocessing pipeline stated in the source reports (MAD winsorisation → industry and style neutralisation via √market-cap WLS → z-score). The neutralisation model is **Barra CNE5** — its 10 style exposures plus 30 CITIC level-1 industry dummies; CNE6 is not used anywhere in the pipeline:
 
 | | Batch 1 | Batch 2 |
 | :--- | :--- | :--- |
@@ -71,7 +71,7 @@ That last row is the whole point. Under the null of pure luck, the expected maxi
 Two further findings:
 
 - **Replicated performance came in below the published figure in 17 of the 18 cases where the source report gave a comparable headline number** (batch 1: 14/15, median shortfall −5.77% annualised; batch 2: 3/3, median −15.30%). The remaining 17 factors did not publish a directly comparable statistic. This is not an accusation of bad faith — it is the ordinary consequence of publication incentives plus in-sample parameter selection.
-- **Neutralisation reorders the entire ranking.** Book-to-price flips to *significantly negative* once Barra-neutralised (t = −3.74) because it is collinear with the Barra BooktoPrice style factor; earnings-to-price loses significance entirely (t = 0.79); turnover and decay-weighted reversal are by far the strongest survivors (t ≈ 10); and the volatility family retains significant IC while its long–short return collapses — the low-volatility anomaly is, in this sample, largely a shadow of style exposure.
+- **Neutralisation reorders the entire ranking.** Book-to-price flips to *significantly negative* once Barra CNE5-neutralised (t = −3.74) because it is collinear with the CNE5 BooktoPrice style factor; earnings-to-price loses significance entirely (t = 0.79); turnover and decay-weighted reversal are by far the strongest survivors (t ≈ 10); and the volatility family retains significant IC while its long–short return collapses — the low-volatility anomaly is, in this sample, largely a shadow of style exposure.
 
 ## 5. The Factor Dashboard
 
@@ -92,8 +92,8 @@ Up to 29 panels in five groups, so the page can be skimmed top-down — the repl
 | **Long-only vs benchmark** | A-share short selling is heavily constrained, so a long–short Sharpe is not an implementable result. The benchmark is the **selection universe equal-weighted, rebalanced by the same engine** — not a cap-weighted index, which would confound the factor with an equal-weight premium. A companion panel re-runs the excess return against alternative benchmarks, because "beats the benchmark" is only meaningful if the answer survives changing it. |
 | **Parameter plateau** | Does performance survive in a neighbourhood of the chosen lookback, or is it a lone peak? A lone peak is overfitting. |
 | **Cost sensitivity and breakeven** | At what one-way cost does the strategy stop paying? A factor with 2.45× monthly two-way turnover lives or dies on this number. |
-| **Neutralisation ladder** | Market-cap 1st/2nd/3rd order versus full Barra style — how much of the signal is just size? |
-| **Barra style correlation** | Is this factor a proxy for a style factor wearing a different name? |
+| **Neutralisation ladder** | Market-cap 1st/2nd/3rd order versus full Barra CNE5 style — how much of the signal is just size? |
+| **Barra CNE5 style correlation** | Is this factor a proxy for a style factor wearing a different name? |
 | **Long–short decomposition** | Which leg produced the return — and is that leg tradeable? |
 | **Regime segmentation** | Does the factor work across market regimes, or only in one? |
 | **Rank autocorrelation and half-life** | How long does the signal persist before it has to be re-traded? |
