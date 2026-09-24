@@ -41,7 +41,6 @@ Skills
 * **Programming**: Python
 * **Libraries**: PyTorch, NumPy, Pandas, Matplotlib, TA-Lib
 * **Tools**: LaTeX, Markdown, Git
-* **AI agents**: heavy Claude Code user
 * **Languages**: Chinese (native), English (CET-4, CET-6)
 
 Honors and Awards
