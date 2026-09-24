@@ -14,7 +14,7 @@ author_profile: true
 ## Knowledge Base
 I maintain a personal knowledge base at matrixcqy.org. Most of it stays private; the part open to the public is:
 
-- [Machine Learning (Fudan University)](https://matrixcqy.org/tex/ml-fdu-claude/) — 10 chapters, written in Chinese
+- [Machine Learning (Fudan University)](https://matrixcqy.org/tex/ml-fdu/) — 10 chapters, written in Chinese
 
 {% include base_path %}
 {% for post in site.posts %}
