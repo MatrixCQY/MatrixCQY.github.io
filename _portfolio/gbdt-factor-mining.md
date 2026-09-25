@@ -1,40 +1,49 @@
 ---
-title: "Machine-Learning Factor Mining with GBDT"
-excerpt: "A 60,000 × 40+ feature matrix from TA-Lib indicators, triple-barrier labelling, and time-series cross-validation — an end-to-end GBDT pipeline built to avoid label leakage."
+title: "Machine-Learning Factor Combination with LightGBM"
+excerpt: "56 commodities × 59 cross-sectional features, a 15-seed regularised LightGBM ensemble, and a 957-day hold-out: IC 0.028 (NW-t 2.53), long–short Sharpe 1.32, all 15 seeds positive."
 collection: portfolio
 ---
 
-An end-to-end gradient-boosted decision tree (**GBDT**) pipeline for mining predictive signals from technical indicators, designed around the leakage problems that make most naive ML backtests unreproducible.
+A non-linear factor-combination pipeline for Chinese commodity futures. The output has to be robust to random seeds and has to show how much of its in-sample performance is overfitting.
 
-## 1. Feature Matrix
+## 1. Data and Features
 
-A **60,000-row × 40+-dimension** feature matrix built from **TA-Lib** technical indicators — momentum, volatility, volume and oscillator families across multiple lookback windows.
+- **56 commodities × 59 features** (93,246 rows): 52 TA-Lib / academic factors plus 7 basis anchors.
+- Each feature is winsorised, sector-neutralised and cross-sectionally standardised.
+- **Label:** the cross-sectional rank of the 5-day forward return.
+- **Split:** a single time cut at 2022-05-24. Training set 48,493 rows / 1,320 days; hold-out 44,753 rows / **957 days**.
 
-## 2. Labelling: the Triple-Barrier Method
+## 2. Model
 
-Fixed-horizon labels ("did the price rise over the next *k* days?") throw away the path and ignore the fact that a position would realistically have been closed early. The **triple-barrier method** (López de Prado, *Advances in Financial Machine Learning*, Ch. 3) instead labels each observation by which of three barriers is touched first:
+Strongly regularised **shallow LightGBM trees**, trained with 15 random seeds and averaged. Each day the scores become a continuous z-weighted long–short book with a 10% volatility target.
 
-- an upper profit-taking barrier,
-- a lower stop-loss barrier,
-- a vertical time barrier.
-
-This produces labels that correspond to a decision an actual strategy could have taken.
-
-## 3. Validation: no label leakage
-
-Standard k-fold cross-validation is invalid on financial time series: overlapping label windows leak information from the validation fold into training. The pipeline uses **time-series cross-validation** with strictly forward-ordered splits, so every validation window sits entirely after its training window.
-
-## 4. Out-of-Sample Results
+## 3. Hold-out Results
 
 | Metric | Value |
 | :--- | :--- |
-| Information Coefficient (IC) | **0.06** |
-| Directional accuracy | **55%** |
-| Long–short portfolio, annualised Sharpe | **0.95** |
-| Annualised return | **14%** |
+| Information Coefficient | **0.028** (NW-t 2.53); IC > 0 on 56.9% of days |
+| Long–short Sharpe, 15-seed ensemble | **1.32** |
+| Blended with the carry prior | **1.34** |
+| Single-seed Sharpe | all 15 positive, mean 1.13, std 0.11, range [0.88, 1.26] |
 
-## 5. Reading the numbers honestly
+The ensemble's 1.32 sits above the single-seed mean of 1.13. This is the variance reduction expected from bagging, and it is also why the best single seed should never be the number reported.
 
-A directional accuracy of 55% and an IC of 0.06 are modest in absolute terms — which is the expected magnitude for a genuine out-of-sample signal on daily data. Numbers far above this range on a feature set of this kind are usually a leakage symptom rather than an alpha discovery. The value of this project is as much in the validation scaffolding as in the point estimates.
+## 4. Overfitting
 
-The same feature system was reused for the [LSTM / GRU sequence models](/portfolio/lstm-gru-timeseries-forecasting/), which allows a controlled comparison between tree ensembles and sequence models on identical inputs.
+| Model | In-sample Sharpe | Hold-out Sharpe |
+| :--- | :--- | :--- |
+| Unregularised deep tree | 21.7 | 0.58 |
+| Regularised shallow ensemble | 9.9 | **1.32** |
+
+Both models lose a lot between in-sample and hold-out, which is normal for trees. Only the regularised model keeps a usable hold-out result, so regularisation here is necessary rather than optional.
+
+The top features by split count are `amihud`, `ret252`, `volofvol` and `adx14`, with `carry` in fifth place. The model mixes liquidity, long-horizon momentum, volatility-of-volatility and trend strength instead of leaning on a single prior.
+
+## 5. Caveats
+
+- **Label leakage at the split.** The time cut has no purge or embargo, so 5-day labels just before 2022-05-24 overlap the hold-out.
+- **Overlapping labels.** Consecutive 5-day labels overlap, which inflates naive t-statistics by roughly √5.
+- **Costs and hold-outs.** Results are gross of costs and come from one hold-out period only.
+- **Next steps.** In order: Purged K-Fold / Combinatorial Purged CV, a cost model, then a Deflated Sharpe Ratio over the configurations searched.
+
+The same features feed the [sequence models and multi-strategy portfolio](/portfolio/lstm-gru-timeseries-forecasting/).

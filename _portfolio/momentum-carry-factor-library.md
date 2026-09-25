@@ -1,39 +1,41 @@
 ---
-title: "Time-Series Momentum & Carry Factor Library — Chinese Commodity Futures"
-excerpt: "A two-factor-family research pipeline over ~15 years of daily data on 30+ Chinese commodity futures, with a full IC / ICIR / monotonicity / half-life evaluation suite."
+title: "Commodity Futures Time-Series Momentum & Carry Factor Research"
+excerpt: "A factor research and falsification pipeline on 26 Chinese commodity futures (2015–2026): momentum Sharpe 0.45, a carry proxy that failed falsification, and a basis-panel carry composite at Sharpe 1.09 / NW-t 3.34, just past a Bonferroni bar of 3.31."
 collection: portfolio
 ---
 
-A research pipeline for two classical factor families on the Chinese commodity futures market, built on roughly **15 years of daily data across 30+ continuous (main-contract) series**.
+A research pipeline for two classical factor families on Chinese commodity futures. It is built to **falsify** signals as much as to find them: every candidate goes through significance, multiple-testing and out-of-sample checks before a number is reported.
 
-## 1. Factor Construction
+## 1. Data
 
-**Time-series momentum.** Multi-window return signals, volatility-normalised so that contracts with very different realised volatility contribute comparably to the composite.
+- **26 continuous (main-contract) series**, daily, 2015-01 to 2026-06. The main contract is chosen by open interest and the series is **ratio back-adjusted** at each roll, removing the phantom roll returns that naive splicing creates.
+- For carry, a separate **56-commodity main-contract basis panel**.
 
-**Carry.** Term-structure slope, i.e. the annualised roll yield implied by the spread between nearby and deferred contracts.
+## 2. Signals
 
-Both families are then **cross-sectionally standardised** and **sector-neutralised**, so that the surviving signal is not simply a bet on one commodity sector (energy, ferrous, agriculture, …).
+**Time-series momentum.** Direction is the average sign of 21 / 63 / 126 / 252-day returns. Position size is 15% divided by the 60-day realised volatility, capped at 2× leverage.
 
-## 2. Evaluation Suite
+**Carry composite.** Three legs: basis level, term-structure slope, and 20-day basis change. Each leg is z-scored and the three are equal-weighted. The result is traded as a continuous-weight long–short book with a 10% portfolio volatility target.
 
-Rather than reporting a single headline Sharpe ratio, every factor is passed through a standard diagnostic battery:
+## 3. Evaluation
 
-| Diagnostic | What it answers |
+IC / ICIR, Newey–West t-statistics, quantile monotonicity and half-life for every factor. On top of that: block bootstrap confidence intervals, walk-forward re-estimation, PBO, the Deflated Sharpe Ratio, and a Bonferroni threshold across all 54 candidate factors tested.
+
+## 4. Results
+
+| Test | Result |
 | :--- | :--- |
-| **IC / ICIR** | Is the rank correlation with forward returns positive, and is it stable relative to its own volatility? |
-| **Quintile monotonicity** | Does the return ordering hold across all five buckets, or is the signal driven by one extreme tail? |
-| **Half-life** | How fast does the signal decay — and therefore how much turnover does it demand? |
+| 26-contract momentum portfolio | Sharpe **0.45** (single-contract baseline 0.16) |
+| Volatility targeting, 2×2 experiment | Sharpe 0.05 → **0.25**, paired t = **3.56**, block-bootstrap 95% CI [0.03, 0.39] |
+| "Continuous-contract slope = carry" proxy | Quintile long–short Sharpe 0.735, but IC 0.0088 (t = 1.45) and correlation with the true roll yield **−0.10**, so the proxy is **rejected** |
+| 54 candidate factors | None has an unadjusted \|t\| above 1.96; none survives Bonferroni |
+| IC-weighted multi-factor composite | 1.18 with full-sample weights (look-ahead); **0.09** with rolling 60-day weights |
+| Single-leg carry strategy | Sharpe 0.45, walk-forward 18 folds IS 0.576 → OOS 0.502 |
+| **Basis-panel carry composite** | Sharpe **1.09**, NW-t **3.34** over 2,396 days (Bonferroni bar 3.31), max drawdown −23.6% |
 
-## 3. Results
+## 5. Caveats
 
-| Portfolio | Annualised Sharpe | Notes |
-| :--- | :--- | :--- |
-| Time-series momentum | **1.15** | |
-| Carry (long–short) | **0.90** | IC 0.06, strictly monotonic across quintiles |
-| **IC-IR weighted composite** | **1.60** | Max drawdown held within **9%** |
-
-The composite weights the two families by their IC-IR, which is the natural weighting when the goal is to maximise the information ratio of the combined signal under an approximate independence assumption.
-
-## 4. Caveats
-
-The strict quintile monotonicity of the carry factor is the more informative result here — a monotone bucket ordering is much harder to produce by chance than a good Sharpe ratio on a single long–short leg. The composite Sharpe of 1.6 is reported before transaction costs and slippage; on a factor with this half-life, execution assumptions materially affect the realisable number.
+- The Sharpe of 1.09 is **gross of transaction costs**.
+- The three carry legs were chosen **after** looking at the 54 candidates. The Bonferroni bar counts those 54 tests but not the extra freedom of that choice, so NW-t 3.34 clears the bar only nominally.
+- The basis uses same-day data, which is mildly optimistic.
+- The IC-weighted multi-factor composite shows how easily look-ahead inflates results: fixing the weights to a rolling window takes its Sharpe from 1.18 to 0.09.
