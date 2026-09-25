@@ -55,7 +55,19 @@ Numerical claims are held to a tolerance rather than an eyeball: the WLS neutral
 
 ## 4. The Result That Matters
 
-Two batches replicated so far — **35 factors**, all-A universe, monthly rebalancing, 20 bp one-way cost, with the preprocessing pipeline stated in the source reports (MAD winsorisation → industry and style neutralisation via √market-cap WLS → z-score). The neutralisation model is **Barra CNE5** — its 10 style exposures plus 30 CITIC level-1 industry dummies; CNE6 is not used anywhere in the pipeline:
+**Full library.** 406 factor records from 30 batches, deduplicated to **341 distinct expressions** and re-run on one common window so that the multiple-testing correction uses the true number of trials:
+
+| Criterion | Result |
+| :--- | :--- |
+| Unadjusted *p* < 0.05 | 277 / 341 |
+| Benjamini–Hochberg FDR, *q* ≤ 0.05 | 276 / 341 |
+| **Deflated Sharpe Ratio > 0.95** (N = 341) | **0 / 341** |
+
+Across 341 trials, the expected maximum annualised Sharpe under pure luck is ≈ 2.6. No factor's Barra-neutralised long–short Sharpe reaches that level, and the DSR count stays at zero whether N is set to 341, 636 or 2,269. Of the 105 factors whose source report gave a comparable long–short figure, 100 (95%) replicated below it, with a median shortfall of −15.4% annualised.
+
+Deduplication matters. The same classic factor appears under many reports: `-1 * ts_return(close, 20)` alone is registered 10 times. Counting those registrations separately would inflate N and double-count one discovery.
+
+**The first two batches in detail.** 35 factors, all-A universe, monthly rebalancing, 20 bp one-way cost, with the preprocessing pipeline stated in the source reports (MAD winsorisation → industry and style neutralisation via √market-cap WLS → z-score). The neutralisation model is **Barra CNE5** — its 10 style exposures plus 30 CITIC level-1 industry dummies; CNE6 is not used anywhere in the pipeline:
 
 | | Batch 1 | Batch 2 |
 | :--- | :--- | :--- |
@@ -108,7 +120,7 @@ Implementation details that keep the numbers honest: the factor is computed at t
 
 - **Capacity is not yet modelled.** ADV-based capacity analysis and market-impact costs are the next module; a factor with a good Sharpe at 20 bp and no capacity ceiling is an incomplete result.
 - **Pure-factor returns via Barra regression** are not yet implemented, so the neutralisation results are portfolio-sort based rather than regression based.
-- **The two batches are not a random sample** of the literature. They were selected to be replicable from the available data, which biases towards factors with simple, fully-specified definitions. The DSR result should be read as "none of the 35 factors I could replicate survives", not "no published factor survives".
+- **The replicated factors are not a random sample** of the literature. They were selected to be replicable from the available data, which biases towards factors with simple, fully specified definitions. Read the DSR result as "none of the 341 factors I could replicate survives", not "no published factor survives".
 - Factor families that the underlying data cannot support — northbound flow, margin trading, shareholder counts, lockup expiries, block trades, tick-level order book, options, convertibles — are recorded in the knowledge base and explicitly flagged infeasible rather than approximated.
 
 *Built on a licensed commercial data vendor; the underlying data and source documents are not redistributed. Individual dashboards cite the source report, as a replication should. The aggregate findings above are a statement about methodology and publication incentives across the literature, not about any particular institution.*
