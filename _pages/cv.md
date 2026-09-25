@@ -17,7 +17,7 @@ Education
 
 Experience
 ======
-* **Quantitative Research Intern**, Quant Team, Soochow Securities, 2026.05 – Present
+* **Quantitative Research Intern**, Quant Team, Soochow Securities, 2026.05 – 2026.08
   * Converted existing cross-sectional stock-selection factors into time-series (timing) signals, improving factor adaptability across different market regimes.
   * Refined existing factors and evaluated their performance, and mined new Alpha factors from data characteristics.
 

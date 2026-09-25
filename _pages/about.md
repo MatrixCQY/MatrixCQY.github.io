@@ -7,7 +7,7 @@ redirect_from:
   - /about.html
 ---
 
-I am **QY CHENG**, an undergraduate in Mathematics and Applied Mathematics at **Fudan University** (B.S., 2023–2027), and currently a quantitative research intern on the quant team at **Soochow Securities**. In Fall 2025 I was an exchange student in the Department of Mathematics at **HKUST**.
+I am **QY CHENG**, an undergraduate in Mathematics and Applied Mathematics at **Fudan University** (B.S., 2023–2027). From May to August 2026 I was a quantitative research intern on the quant team at **Soochow Securities**; in Fall 2025 I was an exchange student in the Department of Mathematics at **HKUST**.
 
 My work is in **systematic alpha research**. I build and evaluate factors on Chinese commodity futures and A-shares, with a focus on:
 
