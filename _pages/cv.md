@@ -41,13 +41,13 @@ Skills
 * **Programming**: Python
 * **Libraries**: PyTorch, NumPy, Pandas, Matplotlib, TA-Lib
 * **Tools**: LaTeX, Markdown, Git
-* **Languages**: Chinese (native), English (CET-4, CET-6)
+* **Languages**: Chinese (native), English (CET-4)
 
 Honors and Awards
 ======
 * Fudan University Freshman Scholarship
 * Basic Science Scholarship, Fudan University — 2023, 2024, 2025
-* Chinese Physics Olympiad (CPhO), Third Prize — 2023
+* Sichuan Provincial Physics Competition, Third Prize — 2023
 * Gaokao (National College Entrance Examination): 694, top 100 in province
 
 Service and leadership
