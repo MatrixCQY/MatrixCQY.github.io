@@ -20,7 +20,7 @@
 # menu. They are preview only and do not participate in the actual colour
 # computation -- editing them does not change the palette.
 
-default: okx
+default: solarized
 
 list:
   - id: okx
