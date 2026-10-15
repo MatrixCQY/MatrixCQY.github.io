@@ -2,6 +2,7 @@
 title: "Machine-Learning Factor Combination with LightGBM"
 excerpt: "56 commodities × 59 cross-sectional features, a 15-seed regularised LightGBM ensemble, and a 957-day hold-out: IC 0.028 (NW-t 2.53), long–short Sharpe 1.32, all 15 seeds positive."
 collection: portfolio
+order: 5
 ---
 
 A non-linear factor-combination pipeline for Chinese commodity futures. The output has to be robust to random seeds and has to show how much of its in-sample performance is overfitting.

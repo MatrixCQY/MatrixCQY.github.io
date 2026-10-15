@@ -2,6 +2,7 @@
 title: "factor_lab — A Reproducibility Framework for Published Equity Factors"
 excerpt: "An independent factor-research stack built to answer one question: how many published sell-side equity factors survive a careful replication and a proper multiple-testing correction? Includes a live 29-panel factor dashboard."
 collection: portfolio
+order: 3
 ---
 
 `factor_lab` is a self-contained equity factor research stack built around a single question:

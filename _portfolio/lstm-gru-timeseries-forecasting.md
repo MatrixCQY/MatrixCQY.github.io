@@ -2,6 +2,7 @@
 title: "Deep Sequence Models & Multi-Strategy Portfolio"
 excerpt: "LSTM / GRU ensembles on 20-day × 9-factor sequences, benchmarked against LightGBM, then seven low-correlation strategies combined into a portfolio with hold-out Sharpe 2.47, NW-t 4.78 and max drawdown −9.1%."
 collection: portfolio
+order: 6
 ---
 
 This project has two parts. Part one asks whether recurrent models add signal beyond the [LightGBM pipeline](/portfolio/gbdt-factor-mining/). Part two combines seven low-correlation strategies and measures how much of the portfolio gain is explained by diversification alone.
@@ -35,7 +36,7 @@ Seven economically distinct legs: LightGBM, carry, LSTM, negative skew, a cointe
 | Average pairwise correlation | 0.07 |
 | Best single leg (cointegration basket) | 1.42 |
 
-Equal-weight, ERC and HRP allocations differ by less than 0.1 in Sharpe, so the reported figure uses equal weights.
+Five allocation schemes give hold-out Sharpe between 2.37 and 2.51: equal weight 2.47, inverse volatility 2.40, ERC risk parity 2.51, HRP 2.37 and minimum variance 2.45. The reported figure uses equal weights.
 
 **How much of the gain is diversification?** Take N legs with equal volatility, a common Sharpe s and average correlation ρ̄. Equal-weighting scales Sharpe by √(N / (1 + (N−1)ρ̄)). With N = 7 and ρ̄ = 0.07 the factor is ≈ **2.22**. Applied to the mean single-leg Sharpe of 1.05, that gives ≈ 2.3, the same order as the measured 2.47. The gain comes from the covariance structure, not from picking legs.
 

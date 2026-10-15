@@ -2,6 +2,7 @@
 title: "Commodity Futures Time-Series Momentum & Carry Factor Research"
 excerpt: "A factor research and falsification pipeline on 26 Chinese commodity futures (2015–2026): momentum Sharpe 0.45, a carry proxy that failed falsification, and a basis-panel carry composite at Sharpe 1.09 / NW-t 3.34, just past a Bonferroni bar of 3.31."
 collection: portfolio
+order: 4
 ---
 
 A research pipeline for two classical factor families on Chinese commodity futures. It is built to **falsify** signals as much as to find them: every candidate goes through significance, multiple-testing and out-of-sample checks before a number is reported.
