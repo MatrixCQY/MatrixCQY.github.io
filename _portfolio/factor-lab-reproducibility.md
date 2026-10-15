@@ -132,14 +132,9 @@ Implementation details that keep the numbers honest: the factor is computed at t
 - Soochow Securities (2020-06-19). 「技术分析拥抱选股因子」系列研究（二）：上下影线，蜡烛好还是威廉好？ [Technical analysis meets stock-selection factors, part 2: upper and lower shadows — candlestick or Williams?].
 - Soochow Securities (2021-03-01). 「技术分析拥抱选股因子」系列研究（四）：换手率分布均匀度，基于分钟成交量的选股因子 [Technical analysis meets stock-selection factors, part 4: turnover-distribution uniformity, a stock-selection factor built from minute-level volume].
 
-**Methods and literature**
+**Literature**
 
 - Harvey, C. R., Liu, Y., & Zhu, H. (2016). …and the Cross-Section of Expected Returns. *The Review of Financial Studies*, 29(1), 5–68.
 - Hou, K., Xue, C., & Zhang, L. (2020). Replicating Anomalies. *The Review of Financial Studies*, 33(5), 2019–2133.
-- Benjamini, Y., & Hochberg, Y. (1995). Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing. *Journal of the Royal Statistical Society: Series B*, 57(1), 289–300.
-- Bailey, D. H., & López de Prado, M. (2012). The Sharpe Ratio Efficient Frontier. *Journal of Risk*, 15(2).
-- Bailey, D. H., & López de Prado, M. (2014). The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality. *The Journal of Portfolio Management*, 40(5), 94–107.
-- Hansen, P. R. (2005). A Test for Superior Predictive Ability. *Journal of Business & Economic Statistics*, 23(4), 365–380.
-- Newey, W. K., & West, K. D. (1987). A Simple, Positive Semi-Definite, Heteroskedasticity and Autocorrelation Consistent Covariance Matrix. *Econometrica*, 55(3), 703–708.
 
 *Built on a licensed commercial data vendor; the underlying data and source documents are not redistributed. Individual dashboards cite the source report, as a replication should. The aggregate findings above are a statement about methodology and publication incentives across the literature, not about any particular institution.*
