@@ -46,7 +46,7 @@ Skills
 * **Programming**: Python
 * **Libraries**: PyTorch, NumPy, Pandas, Matplotlib, TA-Lib
 * **Tools**: LaTeX, Markdown, Git
-* **Languages**: Chinese (native), English (CET-4)
+* **Languages**: Chinese (native), English (IELTS 6.0, CET-4)
 
 Honors and Awards
 ======
