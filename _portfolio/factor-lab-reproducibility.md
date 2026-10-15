@@ -11,7 +11,7 @@ order: 3
 
 This is the domestic-market analogue of the replication literature — Harvey, Liu & Zhu (2016), *…and the Cross-Section of Expected Returns*; Hou, Xue & Zhang (2020), *Replicating Anomalies* — applied to Chinese A-shares. Answering it honestly requires building the whole pipeline, because the answer is extremely sensitive to details that summary tables never report: point-in-time discipline, the neutralisation scheme, transaction costs, and how many candidates were searched before the winner was chosen.
 
-**[→ Open a live factor dashboard](https://matrixcqy.org/dashboards/htsc_turn_1m)** — 29 panels for a single factor, self-contained HTML, light/dark aware, with CSV export, PNG export and an A4 print stylesheet.
+**[→ Open a live factor dashboard](https://kb.matrixcqy.org/dashboards/htsc_turn_1m)** — 29 panels for a single factor, self-contained HTML, light/dark aware, with CSV export, PNG export and an A4 print stylesheet.
 
 ---
 
@@ -90,11 +90,11 @@ Two further findings:
 
 Every replicated factor gets a **self-contained HTML dashboard** — no CDN, no build step, no server. The linked examples are the turnover factor from Huatai Securities' single-factor test series (2017-01-09), a candlestick upper-shadow factor from Soochow Securities' technical-analysis series (2020-06-19), and an intraday turnover-uniformity factor from the same Soochow series (2021-03-01), all reproduced independently:
 
-**[→ 1-Month Average Turnover · factor dashboard](https://matrixcqy.org/dashboards/htsc_turn_1m)**
+**[→ 1-Month Average Turnover · factor dashboard](https://kb.matrixcqy.org/dashboards/htsc_turn_1m)**
 
-**[→ Candlestick Upper-Shadow Std Dev · factor dashboard](https://matrixcqy.org/dashboards/dwzq_candle_up_std)**
+**[→ Candlestick Upper-Shadow Std Dev · factor dashboard](https://kb.matrixcqy.org/dashboards/dwzq_candle_up_std)**
 
-**[→ Turnover-Distribution Uniformity (minute-bar) · factor dashboard](https://matrixcqy.org/dashboards/dwzq_utd)**
+**[→ Turnover-Distribution Uniformity (minute-bar) · factor dashboard](https://kb.matrixcqy.org/dashboards/dwzq_utd)**
 
 The third one doubles as a worked example of Section 4's headline finding: NW *t* = 8.91 on RankIC (nowhere near a fluke), yet the 20 bp long–short annualises at only +1.6% and DSR = 0.000 — a factor that is statistically real and economically dead, the two questions the dashboard is built to keep separate.
 
