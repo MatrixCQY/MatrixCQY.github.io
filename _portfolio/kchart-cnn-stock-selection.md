@@ -5,7 +5,7 @@ collection: portfolio
 order: 1
 ---
 
-Each sample is a stock's last 20 trading days of open / high / low / close, drawn as a 60 × 60 image. A small CNN reads the image and predicts the stock's cross-sectional rank over the next five days. The question is whether a picture of the price path holds information that the standard hand-crafted price factor, 5-day reversal, does not.
+Each sample is a stock's last 20 trading days of open / high / low / close, drawn as a 60 × 60 image. A small CNN reads the image and predicts the stock's cross-sectional rank over the next five days. The question is whether a picture of the price path holds information that the standard hand-crafted price factor, 5-day reversal, does not. The approach follows Jiang, Kelly & Xiu (2023).
 
 This is a personal project. It started from a reference implementation of the image-CNN idea. My work was the audit of that implementation, the fixes, a GPU rendering pipeline, the full-scale training runs and the robustness tests below.
 
@@ -145,5 +145,12 @@ cost_table(port, costs_bp=(0, 5, 10, 15, 20, 30, 40), freq=252, lags=5) -> pd.Da
                                                                           # attrs: break-even bp, turnover
 dsr_from_trials(pnl, trial_sharpes, freq=252) -> dict
 ```
+
+## References
+
+- Jiang, J., Kelly, B., & Xiu, D. (2023). (Re-)Imag(in)ing Price Trends. *The Journal of Finance*, 78(6), 3193–3249.
+- Bailey, D. H., & López de Prado, M. (2014). The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality. *The Journal of Portfolio Management*, 40(5), 94–107.
+- Newey, W. K., & West, K. D. (1987). A Simple, Positive Semi-Definite, Heteroskedasticity and Autocorrelation Consistent Covariance Matrix. *Econometrica*, 55(3), 703–708.
+- Holm, S. (1979). A Simple Sequentially Rejective Multiple Test Procedure. *Scandinavian Journal of Statistics*, 6(2), 65–70.
 
 *Code available on request. The underlying market data are not redistributed.*

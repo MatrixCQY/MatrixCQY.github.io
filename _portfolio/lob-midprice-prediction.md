@@ -123,4 +123,12 @@ main_train(cfg: LobNNConfig, train_data, val_data, ..., device=None, num_epochs=
 evaluate_combination(val_results: dict, test_results: dict) -> tuple    # (table, CombinationFit)
 ```
 
+## References
+
+- Cont, R., Kukanov, A., & Stoikov, S. (2014). The Price Impact of Order Book Events. *Journal of Financial Econometrics*, 12(1), 47–88.
+- Tolstikhin, I., et al. (2021). MLP-Mixer: An all-MLP Architecture for Vision. *Advances in Neural Information Processing Systems*, 34.
+- Newey, W. K., & West, K. D. (1987). A Simple, Positive Semi-Definite, Heteroskedasticity and Autocorrelation Consistent Covariance Matrix. *Econometrica*, 55(3), 703–708.
+- Holm, S. (1979). A Simple Sequentially Rejective Multiple Test Procedure. *Scandinavian Journal of Statistics*, 6(2), 65–70.
+- Hansen, P. R. (2005). A Test for Superior Predictive Ability. *Journal of Business & Economic Statistics*, 23(4), 365–380.
+
 *Code available on request. The order-book data are not redistributed.*

@@ -86,3 +86,11 @@ Five allocation schemes give hold-out Sharpe between 2.37 and 2.51: equal weight
 - **The Deflated Sharpe Ratio of 1.00 is not credible.** The trial count fed to it (40) is an assumption, and the implementation understates cross-trial dispersion. Both push the DSR upward.
 - **Validation loss.** The sequence models' training loss curve uses a randomly permuted validation set. It only tracks convergence and is never used to select models or report out-of-sample results.
 - **Next steps.** In order: Purged K-Fold / Combinatorial Purged CV, a cost model, then a Deflated Sharpe Ratio over the configurations searched.
+
+## References
+
+- Lo, A. W. (2002). The Statistics of Sharpe Ratios. *Financial Analysts Journal*, 58(4), 36–52.
+- López de Prado, M. (2018). *Advances in Financial Machine Learning*. Wiley.
+- Maillard, S., Roncalli, T., & Teïletche, J. (2010). The Properties of Equally Weighted Risk Contribution Portfolios. *The Journal of Portfolio Management*, 36(4), 60–70.
+- López de Prado, M. (2016). Building Diversified Portfolios that Outperform Out of Sample. *The Journal of Portfolio Management*, 42(4), 59–69.
+- Bailey, D. H., & López de Prado, M. (2014). The Deflated Sharpe Ratio: Correcting for Selection Bias, Backtest Overfitting, and Non-Normality. *The Journal of Portfolio Management*, 40(5), 94–107.
