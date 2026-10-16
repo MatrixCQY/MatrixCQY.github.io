@@ -1,6 +1,6 @@
 ---
 title: "Commodity Futures Time-Series Momentum & Carry Factor Research"
-excerpt: "A factor research and falsification pipeline on 26 Chinese commodity futures (2015–2026): momentum Sharpe 0.45, a carry proxy that failed falsification, and a basis-panel carry composite at Sharpe 1.09 / NW-t 3.34 before costs, just past a Bonferroni bar of 3.31."
+excerpt: "A factor research and falsification pipeline on 26 Chinese commodity futures (2015–2026): momentum Sharpe 0.45, a carry proxy that failed falsification, and a basis-panel carry composite at Sharpe 1.09 / NW-t 3.34 before costs, just past a Bonferroni bar of 3.31; a 1 bp fee takes it to 0.99 / 3.02, below the bar."
 collection: portfolio
 order: 4
 ---
@@ -35,10 +35,12 @@ IC / ICIR, Newey–West t-statistics, quantile monotonicity and half-life for ev
 | IC-weighted multi-factor composite | 1.18 with full-sample weights (look-ahead); **0.09** with rolling 60-day weights | none |
 | Single-leg carry strategy | Sharpe 0.45, walk-forward 18 folds IS 0.576 → OOS 0.502 | 1 bp fee |
 | **Basis-panel carry composite** | Sharpe **1.09**, NW-t **3.34** over 2,396 days (Bonferroni bar 3.31), max drawdown −23.6% | **none** |
+| Same composite, net of fees | 1 bp: Sharpe **0.99**, NW-t **3.02** (below the bar); 2 bp: 0.89; break-even ≈ 10 bp one-way | 1 / 2 bp fee |
 
 ## 5. Caveats
 
-- **The Sharpe of 1.09 deducts no costs at all**: neither commission nor slippage. Its continuous weights rebalance daily and the 10% volatility target changes leverage daily, and none of that turnover is charged. The IC-weighted composite likewise deducts nothing; every other strategy result deducts only a 1 bp one-way commission, with no slippage.
+- **The Sharpe of 1.09 deducts no costs at all**: neither commission nor slippage. Charging a 1 bp one-way fee on every change in position (about 26% of gross exposure per day), on the same 2,396 days, gives Sharpe 0.99 and NW-t 3.02. The Bonferroni bar is therefore cleared only before costs; a fee of 0.25 bp is already enough to fall below it. Economically the composite survives realistic fees (break-even ≈ 10 bp), but slippage and the leverage changes from the 10% volatility target are still not charged.
+- The IC-weighted composite also deducts nothing; every other strategy result deducts only a 1 bp one-way commission, with no slippage.
 - The three carry legs were chosen **after** looking at the 54 candidates. The Bonferroni bar counts those 54 tests but not the extra freedom of that choice, so NW-t 3.34 clears the bar only nominally.
 - The basis uses same-day data, which is mildly optimistic.
 - The IC-weighted multi-factor composite shows how easily look-ahead inflates results: fixing the weights to a rolling window takes its Sharpe from 1.18 to 0.09.
