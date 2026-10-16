@@ -1,6 +1,6 @@
 ---
 title: "High-Frequency Mid-Price Forecasting on an 8-Level Limit Order Book"
-excerpt: "23.5 million order-book snapshots of a single instrument; the target is the mid-price change 55 events ahead. Six models are trained on a purged 64/16/20 split, with combination weights fitted on validation only. Test IC is 0.166–0.217 (combination 0.224) and R² is 2.4–4.8%. Hand-crafted microstructure features clearly beat the raw book."
+excerpt: "23.5 million order-book snapshots of a single instrument; the label is y = mid(t+55) − mid(t), the mid-price change over the next 55 book events. Six models are trained on a purged 64/16/20 split, with combination weights fitted on validation only. Test IC is 0.166–0.217 (combination 0.224) and R² is 2.4–4.8%. Hand-crafted microstructure features clearly beat the raw book."
 collection: portfolio
 order: 2
 ---
@@ -12,7 +12,8 @@ This is a personal project. It started from a reference implementation of this p
 ## 1. Data and Label
 
 - **23,532,026 snapshots × 48 columns**: for each of 8 levels, the ask and bid price, size and order count. No timestamps; row order is time. Tick size is 0.5 and the median spread is 1.5, i.e. three ticks.
-- **The label was undocumented, so I recovered it.** y correlates with the future mid-price change mid<sub>t+h</sub> − mid<sub>t</sub> at every horizon h. The correlation peaks at exactly 1.000 at h = 55, where the two are identical point by point. So y = mid<sub>t+55</sub> − mid<sub>t</sub>, a price change in price units.
+- **Label: y<sub>t</sub> = mid<sub>t+55</sub> − mid<sub>t</sub>**, with mid = (best ask + best bid) / 2. It is the change in mid-price over the next 55 book events, in price units (1 tick = 0.5); positive means the mid-price rises. Every model on this page is trained and scored on this one label.
+- **How the label was pinned down.** The dataset's target column came without a definition. I computed mid<sub>t+h</sub> − mid<sub>t</sub> for a range of h and correlated each with it. The correlation reaches exactly 1.000 at h = 55 (0.992 at h = 54 and 56), and at h = 55 the two series are identical point by point (maximum absolute difference 0). The column is therefore exactly the 55-event mid-price change defined above.
 
 ![Correlation of y with the h-event mid-price change](/images/portfolio/lob/lob_label_horizon.png)
 
@@ -88,7 +89,7 @@ Test segment: 4.7 million samples. Significance comes from the slope t-statistic
 
 ## 5. Limitations
 
-- **No trading-cost model.** The median spread is three ticks. Whether a 55-event forecast with this R² survives crossing the spread has not been tested, so the result above is a forecasting result, not a trading result.
+- **No trading costs.** The metrics are forecast accuracy (IC, R²); no spread crossing, commission or slippage is deducted anywhere. The median spread is three ticks. Whether a 55-event forecast with this R² survives crossing the spread has not been tested, so the result above is a forecasting result, not a trading result.
 - **Stability across regimes.** The test segment is almost five times as volatile as the training segment. One split cannot say whether the R² holds in other regimes, and rolling-origin evaluation is the next step.
 - **One seed per network.** The K-line project measured seed dispersion; this one does not yet.
 - **The combination is a further selection step** over six models. A strict comparison would correct for it, e.g. with Hansen's SPA test.
