@@ -1,6 +1,6 @@
 ---
 title: "Machine-Learning Factor Combination & Multi-Strategy Portfolio (Commodity Futures)"
-excerpt: "56 commodities × 59 cross-sectional features. A 15-seed regularised LightGBM reaches hold-out IC 0.028 (NW-t 2.53) and long–short Sharpe 1.32 before costs (1.08 after a 1 bp fee); LSTM / GRU ensembles do not beat it; seven low-correlation strategies combine into a portfolio with hold-out Sharpe 2.47 before costs (2.11 after a 1 bp fee), NW-t 4.78 and max drawdown −9.1%."
+excerpt: "56 commodities × 59 cross-sectional features. A 15-seed regularised LightGBM reaches hold-out Sharpe 0.92 before costs (NW-t 1.56; daily IC 0.016, not significant); LSTM / GRU ensembles do not beat it; seven low-correlation strategies combine into a portfolio with hold-out Sharpe 1.31 before costs (NW-t 2.36, max drawdown −16.1%) and 0.93 after a 1 bp fee. All figures use contract holding returns, after an audit removed phantom roll returns from an earlier version."
 collection: portfolio
 order: 5
 redirect_from:
@@ -12,66 +12,67 @@ A factor-combination pipeline for Chinese commodity futures in three parts: a re
 
 ## 1. Data and Features
 
-- **56 commodities × 59 features** (93,246 rows): 52 TA-Lib / academic factors plus 7 basis anchors.
+- **56 commodities × 59 features** (93,040 rows): 52 TA-Lib / academic factors plus 7 basis anchors.
 - Each feature is winsorised, sector-neutralised and cross-sectionally standardised.
+- **Returns** are the dominant contract's own day-to-day price changes, with zero on roll days. An earlier version used a roll-adjusted main-contract series that still contained roll gaps; see the audit on the [momentum & carry page](/portfolio/momentum-carry-factor-library/). The correction cut the LightGBM Sharpe from 1.32 to 0.92 and the portfolio from 2.47 to 1.31.
 - **Label:** the cross-sectional rank of the 5-day forward return.
-- **Split:** a single time cut at 2022-05-24. Training set 48,493 rows / 1,320 days; hold-out 44,753 rows / **957 days**.
+- **Split:** a single time cut at 2022-05-24. Training set 48,412 rows / 1,320 days; hold-out 44,628 rows / **952 days**.
 
 ## 2. LightGBM
 
-Strongly regularised **shallow LightGBM trees**, trained with 15 random seeds and averaged. Each day the scores become a continuous z-weighted long–short book with a 10% volatility target.
+Strongly regularised **shallow LightGBM trees**, trained with 15 random seeds and averaged. Each day the scores become a continuous z-weighted long–short book with a 10% volatility target; its 63-day warm-up is dropped before computing Sharpe.
 
 **Costs:** none deducted unless a row says otherwise. Where a fee is shown, it is a one-way commission charged on every change in position, on the same trading days; slippage is never deducted.
 
 | Metric | Value |
 | :--- | :--- |
-| Information Coefficient | **0.028** (NW-t 2.53); IC > 0 on 56.9% of days |
-| Long–short Sharpe, 15-seed ensemble | **1.32** |
-| Blended with the carry prior | **1.34** |
-| Single-seed Sharpe | all 15 positive, mean 1.13, std 0.11, range [0.88, 1.26] |
+| Information Coefficient | **0.016** (NW-t 1.42, not significant); IC > 0 on 53.8% of days |
+| Long–short Sharpe, 15-seed ensemble | **0.92** (NW-t 1.56) |
+| Blended with the carry prior | 0.76 |
+| Single-seed Sharpe (no volatility target) | all 15 positive, mean 0.75, std 0.12, range [0.56, 0.93] |
 
-The ensemble's 1.32 sits above the single-seed mean of 1.13. This is the variance reduction expected from bagging, and it is also why the best single seed should never be the number reported.
+The single-seed figures are computed without the volatility target and on slightly different days, so they are for comparing seeds with each other, not for measuring the gain from averaging. Blending in the carry prior lowers the result, so the plain ensemble is the reported model.
 
 **Overfitting.**
 
 | Model | In-sample Sharpe | Hold-out Sharpe |
 | :--- | :--- | :--- |
-| Unregularised deep tree | 21.7 | 0.58 |
-| Regularised shallow ensemble | 9.9 | **1.32** |
+| Unregularised deep tree | 21.5 | −0.35 |
+| Regularised shallow ensemble | 10.3 | **0.92** |
 
-Both models lose a lot between in-sample and hold-out, which is normal for trees. Only the regularised model keeps a usable hold-out result, so regularisation here is necessary rather than optional.
+In-sample figures use 3 seeds and hold-out figures 15. Both models lose a lot between in-sample and hold-out, which is normal for trees. The deep tree loses money out of sample; only the regularised model keeps a positive hold-out result.
 
 **Purge and costs.**
 
 | Training set | IC (NW-t) | Sharpe, no costs | Sharpe, 1 bp fee |
 | :--- | :--- | :--- | :--- |
-| Original split | 0.0282 (2.53) | 1.32 | 1.08 |
-| Purge the last 5 days before the split | 0.0281 (2.53) | 1.34 | 1.10 |
-| Purge 5 days + 20-day embargo | 0.0284 (2.49) | 1.32 | 1.09 |
+| Original split | 0.0160 (1.42) | 0.92 | 0.66 |
+| Purge the last 5 days before the split | 0.0149 (1.33) | 0.96 | 0.70 |
+| Purge 5 days + 20-day embargo | 0.0156 (1.39) | 0.95 | 0.69 |
 
-Removing the training labels that overlap the hold-out changes nothing. Costs are the real constraint: the book turns over about half its gross exposure every day, so Sharpe falls to 1.08 at 1 bp and 0.85 at 2 bp, and break-even is about **5.6 bp** one-way. Lower turnover, not a better model, is what this signal needs before it could trade.
+Removing the training labels that overlap the hold-out changes little. Costs matter more: the book turns over about half its gross exposure every day, so Sharpe falls to 0.66 at 1 bp and 0.40 at 2 bp, and break-even is about **3.6 bp** one-way. Lower turnover, not a better model, is what this signal needs before it could trade.
 
-The top features by split count are `amihud`, `ret252`, `volofvol` and `adx14`, with `carry` in fifth place. The model mixes liquidity, long-horizon momentum, volatility-of-volatility and trend strength instead of leaning on a single prior.
+The top features by split count are `amihud`, `adx14`, `volofvol` and `ret252`, with `carry` in fifth place: liquidity, trend strength, volatility-of-volatility and long-horizon momentum rather than a single prior.
 
 ## 3. Sequence Models
 
 Do recurrent models add signal beyond the trees?
 
-**Inputs.** 20-day × 9-factor sequences. The 9 channels come from the LightGBM feature set, and the split date is the same (2022-05-24).
-- 67,248 sequences in total: 31,455 for training and 35,638 in the hold-out.
-- After windowing, the hold-out signal covers **759 days × 54 commodities**. Two commodities drop out because their windows always contain gaps.
+**Inputs.** 20-day × 9-channel sequences of price, volatility, open-interest and basis information, with the same split date (2022-05-24).
+- 67,104 sequences in total: 31,449 for training and 35,500 in the hold-out.
+- After windowing, the hold-out signal covers **754 days × 54 commodities**. Two commodities drop out because their windows always contain gaps.
 
 **Models.** LSTM (15-seed ensemble) and GRU (5-seed ensemble) in PyTorch. Training samples whose 5-day label reaches into the hold-out are purged. **Costs:** none deducted unless stated, neither commission nor slippage.
 
 | Model | Hold-out Sharpe |
 | :--- | :--- |
-| LightGBM ensemble (957-day hold-out) | **1.32** |
-| LSTM ensemble | **1.08** (NW-t 1.89) |
-| GRU ensemble | 0.84 |
+| LightGBM ensemble (952-day hold-out, with volatility target) | **0.92** |
+| LSTM ensemble | **0.81** (NW-t 1.47) |
+| GRU ensemble | 0.58 |
 
-The LSTM does **not** beat the tree model, and its NW-t of 1.89 is not significant at 5%. Single-seed Sharpe ranges from 0.36 to 1.50. Over 759 days the standard error of an annualised Sharpe is about 0.58 (Lo, 2002), so seed-to-seed differences of a few tenths are statistically indistinguishable.
+The LSTM and GRU figures are without the volatility target. The LSTM does **not** beat the tree model, and neither is significant at 5%. Single-seed LSTM Sharpe ranges from 0.37 to 1.25. Over 754 days the standard error of an annualised Sharpe is about 0.58 (Lo, 2002), so seed-to-seed differences of a few tenths are statistically indistinguishable.
 
-Extending the purge to the 20-day input window (training samples must end 25 days before the split) gives an LSTM Sharpe of 1.16 (NW-t 2.07), so the shorter purge did not inflate the result. After a 1 bp fee the two versions give 0.92 and 1.01, both with NW-t below 1.96.
+Extending the purge to the 20-day input window (training samples must end 25 days before the split) gives an LSTM Sharpe of 0.85 (NW-t 1.55), so the shorter purge did not inflate the result. After a 1 bp fee the two versions give 0.66 and 0.71.
 
 ## 4. Multi-Strategy Portfolio
 
@@ -81,26 +82,34 @@ Seven economically distinct legs: LightGBM, carry, LSTM, negative skew, a cointe
 
 | Metric | Value |
 | :--- | :--- |
-| Hold-out Sharpe | **2.47** |
-| Hold-out Sharpe, 1 bp / 2 bp fee on the six signal legs | **2.11** (NW-t 4.10) / 1.76 (NW-t 3.41) |
-| Newey–West t | **4.78** |
-| Max drawdown | **−9.1%** |
-| Annualised return | 25.7% over 988 trading days |
-| Average pairwise correlation | 0.07 |
-| Best single leg (cointegration basket) | 1.42 |
+| Hold-out Sharpe | **1.31** |
+| Hold-out Sharpe, 1 bp / 2 bp fee on the six signal legs | 0.93 (NW-t 1.67) / 0.55 (NW-t 0.99) |
+| Newey–West t | **2.36** |
+| Deflated Sharpe Ratio | 0.65 (below 0.95) |
+| Max drawdown | **−16.1%** |
+| Annualised return | 13.6% over 988 trading days |
+| Average pairwise correlation | 0.06 |
+| Best single leg (negative skew) | 1.06 |
 
-Five allocation schemes give hold-out Sharpe between 2.37 and 2.51: equal weight 2.47, inverse volatility 2.40, ERC risk parity 2.51, HRP 2.37 and minimum variance 2.45. The reported figure uses equal weights.
+The portfolio clears NW-t 1.96 before costs but not the Deflated Sharpe Ratio, and not after a 1 bp fee.
 
-**Leave-one-out.** Dropping the cointegration basket costs the most (−0.53). Dropping the LSTM leg raises Sharpe from 2.47 to 2.54, but the 0.07 gap is far inside the Sharpe standard error (≈ 0.5), and removing legs by hold-out marginal value would be one more selection step, so all seven are kept.
+**Allocation schemes.** Equal weight 1.31, inverse volatility 1.31, ERC risk parity 1.33, HRP 1.36 and minimum variance 1.29. The covariance matrix behind the four non-equal schemes is estimated on the hold-out itself, so these numbers are only a relative comparison; the equal-weight headline needs no estimate. The spread is small because the legs are already equal-volatility and nearly uncorrelated.
 
-**How much of the gain is diversification?** Take N legs with equal volatility, a common Sharpe s and average correlation ρ̄. Equal-weighting scales Sharpe by √(N / (1 + (N−1)ρ̄)). With N = 7 and ρ̄ = 0.07 the factor is ≈ **2.22**. Applied to the mean single-leg Sharpe of 1.05, that gives ≈ 2.3, the same order as the measured 2.47. The gain comes from the covariance structure, not from picking legs.
+**Leave-one-out.** Dropping the cointegration basket costs the most (−0.30), then negative skew (−0.18). Dropping the LSTM (−0.02) or 5-day reversal (+0.02) barely matters. Removing legs by hold-out marginal value would be one more selection step, so all seven are kept.
+
+**The cointegration leg is not evidence of cointegration.** Of 902 pair tests on the training period, 40 pass at 5% against 45.1 expected by chance, and none survives Bonferroni. The leg's hold-out Sharpe is 0.56; its value here is low correlation with the other legs, not a proven spread relationship.
+
+**How much of the gain is diversification?** Take N legs with equal volatility, a common Sharpe s and average correlation ρ̄. Equal-weighting scales Sharpe by √(N / (1 + (N−1)ρ̄)). With N = 7 and ρ̄ = 0.06 the factor is ≈ **2.27**. Applied to the mean single-leg Sharpe of 0.57, that gives ≈ 1.29, close to the measured 1.31. The gain comes from the covariance structure, not from picking legs.
 
 ## 5. Scope
 
 - **Costs.** Fees are modelled as a one-way commission of 1–2 bp on position changes. Slippage, market impact and the leverage changes made by the volatility targets are not charged, so even the net figures are optimistic.
-- **One hold-out.** Purging the label overlap and adding an embargo leave the results unchanged (Sections 2 and 3), but a single time split is still one out-of-sample observation.
-- **Selection.** The seven legs were chosen on the same data, from a larger set of signals tried. Section 4 shows how much of the 2.47 comes from low correlation, but the single-leg Sharpes it starts from were themselves selected, so 2.47 is an upper bound.
+- **One hold-out.** Purging the label overlap and adding an embargo leave the results almost unchanged (Sections 2 and 3), but a single time split is still one out-of-sample observation.
+- **Start of the hold-out.** Four legs only have values in the hold-out, so for its first 63 days the portfolio volatility target is estimated from three legs and runs at higher leverage.
+- **Selection.** The seven legs were chosen on the same data, from a larger set of signals tried. Section 4 shows how much of the 1.31 comes from low correlation, but the single-leg Sharpes it starts from were themselves selected, so 1.31 is an upper bound.
+- **Survivorship.** The 56 commodities are those listed today.
 
 ## References
 
 - Lo, A. W. (2002). The Statistics of Sharpe Ratios. *Financial Analysts Journal*, 58(4), 36–52.
+- Koijen, R. S. J., Moskowitz, T. J., Pedersen, L. H., & Vrugt, E. B. (2018). Carry. *Journal of Financial Economics*, 127(2), 197–225.

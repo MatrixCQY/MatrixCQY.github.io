@@ -5,13 +5,13 @@ collection: portfolio
 order: 1
 ---
 
-Each sample is a stock's last 20 trading days of open / high / low / close, drawn as a 60 × 60 image. A small CNN reads the image and predicts the stock's cross-sectional rank over the next five days. The question is whether a picture of the price path holds information that the standard hand-crafted price factor, 5-day reversal, does not. The approach follows Jiang, Kelly & Xiu (2023).
+Each sample is a stock's last 20 trading days of open / high / low / close, drawn as a 60 × 60 image. A small CNN reads the image and predicts the stock's cross-sectional rank over the next five days. The question is whether a picture of the price path holds information that the standard hand-crafted price factor, 5-day reversal, does not. The approach adapts Jiang, Kelly & Xiu (2023): they classify the sign of the future return with a cross-entropy loss, while this network regresses the cross-sectional rank with MSE.
 
 This is a personal project. It started from a reference implementation of the image-CNN idea. My work was the audit of that implementation, the fixes, a GPU rendering pipeline, the full-scale training runs and the robustness tests below.
 
 ## 1. Data
 
-- **4,303 A-shares**, daily adjusted OHLC, 2017-01 to 2022-05 (4.5 million stock-days).
+- **4,303 A-shares**, daily adjusted OHLC, 2017-01 to 2022-05 (4.5 million stock-days). The universe is the main boards plus ChiNext (no STAR Market or Beijing exchange); 253 names stop trading before the end of the sample, so delisted stocks are not filtered out.
 - **Label.** Buy at the open of day t+1, sell at the open of day t+6: R<sub>t</sub> = O<sub>t+6</sub> / O<sub>t+1</sub> − 1. Each day the label is converted to its cross-sectional percentile minus 0.5. This bounds the target, removes the market's daily move, and stops a handful of extreme returns from dominating the MSE loss.
 - **Split by window end date**, with a 6-day purge (the label span) and a 20-day gap (the image span) at each boundary:
 
@@ -39,7 +39,7 @@ This is a personal project. It started from a reference implementation of the im
 | A2 | Perturbing data after a date leaves every prediction up to that date unchanged. |
 | A3 | Changing only the last day of a window changes only the rightmost three pixel columns. Shuffling a batch in eval mode and un-shuffling the output changes nothing (< 10⁻⁶). |
 | A4 | No cross-period preprocessing: images are normalised within their own window, and labels are ranked within their own day. |
-| A5 – A7 | Fixed seed reproduces weights exactly; the checkpoint stores config and split parameters; validation loss moves during training. |
+| A5 – A7 | Fixed seed reproduces weights exactly (checked on CPU; cuDNN on the GPU is not bit-for-bit deterministic); the checkpoint stores config and split parameters; validation loss moves during training. |
 | A8 | The label is a return, not a price level, and the purge and gap are applied. |
 
 ## 3. What the Audit Found in the Reference Implementation
@@ -60,10 +60,10 @@ The single-seed run stopped at epoch 13; the best validation epoch was 5.
 
 | Signal | Test RankIC (312 days) | NW-t (5 lags) |
 | :--- | ---: | ---: |
-| CNN, single seed | **0.078** | **10.9** |
+| CNN, single seed (seed 42, first GPU run) | **0.078** | **10.9** |
 | 5-day reversal | 0.022 | 2.0 |
 
-Both clear a Holm correction at 5%; the reversal only just clears it. An occlusion test asked which days the network uses: blacking out each day's three columns in turn, the five most sensitive days are exactly the last five, in order of recency. The network reads mainly the most recent week, the same span as 5-day reversal, yet its IC is 3.6 times higher. Whether the extra information comes from intraday shape (shadows, body position) needs an ablation that has not been run yet.
+Both clear a Holm correction at 5%; the reversal only just clears it, and only at 5 lags (its NW-t is 1.9 at 10 or 20 lags, while the CNN's stays above 10). An occlusion test asked which days the network uses: blacking out each day's three columns in turn, the five most sensitive days are exactly the last five, in order of recency. The network reads mainly the most recent week, the same span as 5-day reversal, yet its IC is 3.6 times higher. Whether the extra information comes from intraday shape (shadows, body position) needs an ablation that has not been run yet.
 
 ## 5. Robustness
 
@@ -71,7 +71,7 @@ A single seed and a single training run say little on their own, so three checks
 
 ![RankIC by seed, ensemble and reversal](/images/portfolio/kchart-cnn/kchart_ic.png)
 
-**Seeds.** Five independent trainings (seeds 1, 2, 3, 4, 42). Best validation epochs fall between 4 and 9. Single-seed RankIC is 0.069–0.076 (mean 0.0725, standard deviation 0.0027), and every seed has NW-t above 9. The ensemble averages the five daily cross-sectional ranks: RankIC **0.078**, NW-t **10.1**, positive on 85.9% of days. It beats the best single seed because seed-specific errors partly cancel.
+**Seeds.** Five independent trainings (seeds 1, 2, 3, 4, 42). Best validation epochs fall between 4 and 9. Single-seed RankIC is 0.069–0.076 (mean 0.0725, standard deviation 0.0027), and every seed has NW-t above 9. Seed 42 enters here as a GPU re-run (0.076); the 0.078 in Section 4 is the best of the six runs, and 0.0725 is the representative single-model figure. The ensemble averages the five daily cross-sectional ranks: RankIC **0.078**, NW-t **10.1**, positive on 85.9% of days. It beats the best single seed because seed-specific errors partly cancel.
 
 **Paired test against reversal.** On the same 312 days, the daily IC difference (ensemble minus reversal) averages **0.056** with NW-t **4.3**, and the CNN wins on 71% of days.
 
@@ -90,7 +90,7 @@ Controlling for reversal barely moves the CNN. Controlling for the CNN leaves re
 
 ![NAV at 0 and 15 bp, and net Sharpe against cost](/images/portfolio/kchart-cnn/kchart_costs.png)
 
-Long top 10% minus the equal-weight market, CNN ensemble, average one-way turnover 26.7% per day:
+Long top 10% minus the equal-weight market, CNN ensemble, daily turnover 26.7% (buys plus sells; 13.4% each way). Cost is the one-way rate times this turnover:
 
 | One-way cost | Annualised excess | Volatility | Sharpe | NW-t | Max drawdown |
 | :--- | ---: | ---: | ---: | ---: | ---: |
@@ -100,7 +100,7 @@ Long top 10% minus the equal-weight market, CNN ensemble, average one-way turnov
 | 20 bp | 1.3% | 4.6% | 0.28 | 0.31 | −5.5% |
 
 - **Break-even cost ≈ 22 bp one-way.** At the 15 bp baseline, the excess return is **not significant** (NW-t 1.1).
-- The five seeds' net Sharpe at 15 bp ranges from 0.24 to 1.46. The **Deflated Sharpe Ratio** (Bailey & López de Prado, 2014) uses the variance of these five Sharpes as the luck threshold, as in the original paper. The result is **0.70**, below the 0.95 bar.
+- The five seeds' net Sharpe at 15 bp ranges from 0.24 to 1.46. The **Deflated Sharpe Ratio** (Bailey & López de Prado, 2014) uses the variance of these five Sharpes as the luck threshold, as in the original paper. The result is **0.70**, below the 0.95 bar. Counting only the five seeds as trials understates the search, so the true figure is lower still.
 - Long–short (not implementable): break-even about 43 bp; at 15 bp, Sharpe 2.57 with NW-t 3.0. Most of that return comes from the short leg.
 - For comparison, 5-day reversal loses money in the long-excess form even before costs (−6.3% annualised). Its long–short version breaks even at 13 bp.
 
@@ -110,6 +110,7 @@ Long top 10% minus the equal-weight market, CNN ensemble, average one-way turnov
 - Capacity and market impact: the top decile is about 400 names, and it needs an assessment against traded value.
 - Hedge basis: an equal-weight market is not a tradeable index, and a CSI 1000 futures hedge would add tracking error.
 - The test period is one 16-month window.
+- Exits are not checked for limit-down or suspension; such days are booked at a zero return. They are under 0.1% of the long book.
 - The occlusion result is suggestive, not an ablation.
 - The optimiser is Adam with coupled L2, as in the reference implementation. Switching to AdamW would require re-tuning the decay, so it was left unchanged and all numbers above use this setting.
 

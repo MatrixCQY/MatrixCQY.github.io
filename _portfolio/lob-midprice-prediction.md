@@ -11,8 +11,8 @@ This is a personal project. It started from a reference implementation of this p
 
 ## 1. Data and Label
 
-- **23,532,026 snapshots × 48 columns**: for each of 8 levels, the ask and bid price, size and order count. No timestamps; row order is time. Tick size is 0.5 and the median spread is 1.5, i.e. three ticks.
-- **Label: y<sub>t</sub> = mid<sub>t+55</sub> − mid<sub>t</sub>**, with mid = (best ask + best bid) / 2. It is the change in mid-price over the next 55 book events, in price units (1 tick = 0.5); positive means the mid-price rises. Every model on this page is trained and scored on this one label.
+- **23,532,026 snapshots × 48 columns**: for each of 8 levels, the ask and bid price, size and order count. No timestamps; row order is time. Tick size is 0.5. The spread widens over the sample: its median is 1.5 (three ticks) on the training segment, 2.0 on validation and 4.0 (eight ticks) on the test segment.
+- **Label: y<sub>t</sub> = mid<sub>t+55</sub> − mid<sub>t</sub>**, with mid = (best ask + best bid) / 2. It is the change in mid-price over the next 55 book events, in price units (1 tick = 0.5); positive means the mid-price rises. Every model on this page is trained and scored on this one label, clipped to the training segment's 0.5% / 99.5% bounds (±3.0). The clip binds on 0.8% of training labels but on 13.5% of test labels, so the test IC and R² below describe the clipped label and would be lower on the raw one.
 - **How the label was pinned down.** The dataset's target column came without a definition. I computed mid<sub>t+h</sub> − mid<sub>t</sub> for a range of h and correlated each with it. The correlation reaches exactly 1.000 at h = 55 (0.992 at h = 54 and 56), and at h = 55 the two series are identical point by point (maximum absolute difference 0). The column is therefore exactly the 55-event mid-price change defined above.
 
 ![Correlation of y with the h-event mid-price change](/images/portfolio/lob/lob_label_horizon.png)
@@ -37,7 +37,7 @@ This is a personal project. It started from a reference implementation of this p
 - GRU (window 60, 2 layers, hidden 64) and a simplified MLP-Mixer (window 10, 4 layers, hidden 64; after Tolstikhin et al., 2021), each trained twice: once on the 48 raw book columns and once on the 16 features.
 - XGBoost (60 trees, depth 6) and Lasso (α = 10⁻⁵) on the features.
 
-The networks use MSE loss, AdamW and batch 512, with early stopping on validation loss (patience 5, at most 30 epochs). The **combination** is an OLS regression of y on the six model scores, fitted on the validation segment and evaluated on the test segment.
+The networks use MSE loss, AdamW and batch 512, with learning rates taken from the reference implementation and not tuned (5 × 10⁻⁵ on the raw book, 10⁻⁵ on the features), with early stopping on validation loss (patience 5, at most 30 epochs). The **combination** is an OLS regression of y on the six model scores, fitted on the validation segment and evaluated on the test segment.
 
 **Full-scale engineering.** The first full run failed trying to allocate 8.4 GB. Reading in float32 and computing features in 2-million-row chunks fixed it: the chunks overlap by 256 rows and the output is bit-identical to the one-pass version. Peak memory is now 12.9 GB for the feature pipeline and 17.8 GB for the raw book. A loader that keeps the whole table in GPU memory and slices windows by index arithmetic raised throughput from 45,000 to **130,000 samples per second**; the rest of the time is the GRU itself. The full run takes about two hours on a laptop GPU.
 
@@ -61,11 +61,11 @@ The networks use MSE loss, AdamW and batch 512, with early stopping on validatio
 | **"Best" weights stored by reference.** `state_dict()` shares storage with the live parameters, so the saved model is the last epoch. | Reproduced with three SGD steps. | Deep copy; asserted in A6. |
 | **Prediction script reads the row-number column as data.** | 49 columns into a 48-input GRU (crash); the feature function silently shifts every column by one. | Columns validated by name on load. |
 | **19 features with rank 17.** One imbalance feature has the opposite sign to the literature convention, and the spread is missing. | Two columns are identical point by point. Corr(imbalance, y) = −0.098 where buy pressure should be positive. | Rewritten 16-feature set, bid-positive, OFI aligned to best-price changes. |
-| **Clipping quantiles taken from the full sample**, including the test period. The models were also evaluated on three differently clipped versions of y. | Full-sample bounds [−3.75, 4.0] vs. training-only [−2.5, 2.5]. | Train-only bounds; one label for all six models. |
+| **Clipping quantiles taken from the full sample**, including the test period. The models were also evaluated on three differently clipped versions of y. | At the reference's 1% / 99% level: full-sample bounds [−3.75, 4.0] vs. training-only [−2.5, 2.5]. | Train-only bounds; one label for all six models. |
 
 ## 4. Results
 
-Test segment: 4.7 million samples. Significance comes from the slope t-statistic in y = a + b·score, with Newey–West HAC standard errors at 55 lags (labels overlap by 54 events, so naive t-statistics are badly inflated). The six single-model p-values are Holm-corrected.
+Test segment: 4.7 million samples. Significance comes from the slope t-statistic in y = a + b·score, with Newey–West HAC standard errors at 55 lags (labels overlap by 54 events, so naive t-statistics are badly inflated). The six single-model p-values are Holm-corrected. Signal and volatility persist far longer than 55 events, so these t-statistics are upper bounds: longer lags or block-based estimates give much smaller values, though still far above any significance threshold.
 
 | Model | Best epoch | Test IC | Test R² | HAC t |
 | :--- | ---: | ---: | ---: | ---: |
@@ -80,17 +80,17 @@ Test segment: 4.7 million samples. Significance comes from the slope t-statistic
 
 ![Test IC and R² by model](/images/portfolio/lob/lob_test_ic_r2.png)
 
-- **Features beat the raw book.** The same networks gain about 0.05 IC and nearly double their R² when fed the 16 features instead of the 48 raw columns. The raw-book networks peak at epochs 1 and 4; the feature networks keep improving to epochs 16 and 26.
+- **Features beat the raw book.** The same networks gain about 0.05 IC and nearly double their R² when fed the 16 features instead of the 48 raw columns. The raw-book networks peak at epochs 1 and 4; the feature networks keep improving to epochs 16 and 26, partly because their learning rate is five times smaller. Each network was trained once, with no tuning on either input.
 - **The combination adds R², not IC.** Its IC is only 0.007 above the best single model, but R² rises from 4.51% to 4.84%. The equal-weight average has a similar IC but only 3.80% R².
 - **Why the gap between IC and R².** For a forecast of the form a + b·s, the best achievable R² is IC², reached when the scale b is right. The validation-fit combination gets 4.84% against IC² = 5.01%, so its scale is nearly optimal. The equal-weight average gets 3.80% against 4.79%: averaging raw scores loses scale, while regression weights fix it. The same bound explains why the R² values look small: with IC around 0.2, R² cannot exceed about 5%. A low R² is a property of the metric here, not evidence of a weak forecast.
-- **Validation loss above training loss is not overfitting here.** The MSE of a constant-zero forecast is E[y²], and E[y²] is 1.24 / 1.98 / 5.88 on the three segments: the later part of the sample is far more volatile. Overfitting shows up as validation loss rising with epochs, not as one curve sitting above the other.
+- **Validation loss above training loss is not overfitting here.** The MSE of a constant-zero forecast is E[y²], and E[y²] (before clipping) is 1.24 / 1.98 / 5.88 on the three segments: the later part of the sample is far more volatile. Overfitting shows up as validation loss rising with epochs, not as one curve sitting above the other.
 
 ![Rolling mean of y squared across the sample](/images/portfolio/lob/lob_label_variance.png)
 
 ## 5. Limitations
 
-- **No trading costs.** The metrics are forecast accuracy (IC, R²); no spread crossing, commission or slippage is deducted anywhere. The median spread is three ticks. Whether a 55-event forecast with this R² survives crossing the spread has not been tested, so the result above is a forecasting result, not a trading result.
-- **Stability across regimes.** The test segment is almost five times as volatile as the training segment. One split cannot say whether the R² holds in other regimes, and rolling-origin evaluation is the next step.
+- **No trading costs.** The metrics are forecast accuracy (IC, R²); no spread crossing, commission or slippage is deducted anywhere. The median spread on the test segment is eight ticks. Whether a 55-event forecast with this R² survives crossing the spread has not been tested, so the result above is a forecasting result, not a trading result.
+- **Stability across regimes.** Before clipping, the test segment's E[y²] is almost five times the training segment's. One split cannot say whether the R² holds in other regimes, and rolling-origin evaluation is the next step.
 - **One seed per network.** The K-line project measured seed dispersion; this one does not yet.
 - **The combination is a further selection step** over six models. A strict comparison would correct for it, e.g. with Hansen's SPA test.
 - One instrument, no timestamps, so time-of-day effects cannot be separated from event-time effects.
