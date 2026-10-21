@@ -5,7 +5,7 @@ collection: portfolio
 order: 2
 ---
 
-The data are snapshots of an 8-level limit order book (LOB) for one instrument: 23.5 million events, with row order as the only clock. The task is to forecast the mid-price change 55 events ahead with sequence models (GRU, MLP-Mixer) and tabular models (XGBoost, Lasso), then combine them.
+The data are snapshots of an 8-level limit order book (LOB) for one instrument: 23.5 million events, with row order as the only clock. The task is to forecast the mid-price change 55 events ahead with sequence models (GRU, MLP-Mixer) and tabular models (XGBoost, Lasso), then combine them. It is a pure **time-series** problem: one instrument, event time, no cross-section, so IC here is the time-series correlation between forecast and realised change, not a cross-sectional rank correlation.
 
 This is a personal project. It started from a reference implementation of this pipeline. My work was the audit, which found that its reported test results were in-sample, plus the fixes, a memory- and GPU-efficient full-scale pipeline, and the evaluation below.
 

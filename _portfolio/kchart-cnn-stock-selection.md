@@ -5,7 +5,7 @@ collection: portfolio
 order: 1
 ---
 
-Each sample is a stock's last 20 trading days of open / high / low / close, drawn as a 60 × 60 image. A small CNN reads the image and predicts the stock's cross-sectional rank over the next five days. The question is whether a picture of the price path holds information that the standard hand-crafted price factor, 5-day reversal, does not. The approach adapts Jiang, Kelly & Xiu (2023): they classify the sign of the future return with a cross-entropy loss, while this network regresses the cross-sectional rank with MSE.
+Each sample is a stock's last 20 trading days of open / high / low / close, drawn as a 60 × 60 image. A small CNN reads the image and predicts the stock's cross-sectional rank over the next five days. This is a **cross-sectional** task: the label is a within-day percentile, the metric is the daily cross-sectional Rank IC, and the portfolio is market-neutral by construction; the only time-series element is that each stock's own 20-day history is the input. The question is whether a picture of the price path holds information that the standard hand-crafted price factor, 5-day reversal, does not. The approach adapts Jiang, Kelly & Xiu (2023): they classify the sign of the future return with a cross-entropy loss, while this network regresses the cross-sectional rank with MSE.
 
 This is a personal project. It started from a reference implementation of the image-CNN idea. My work was the audit of that implementation, the fixes, a GPU rendering pipeline, the full-scale training runs and the robustness tests below.
 

@@ -5,7 +5,7 @@ collection: portfolio
 order: 3
 ---
 
-`factor_lab` is a self-contained equity factor research stack built around a single question:
+`factor_lab` is a self-contained **cross-sectional** equity factor research stack (monthly rebalanced sorts across the A-share universe, evaluated by cross-sectional IC and long–short spreads, never by single-stock timing) built around a single question:
 
 > Of the factors published in sell-side quantitative research, how many survive an **independent replication** and a **proper multiple-testing correction**?
 

@@ -15,7 +15,7 @@ A factor-combination pipeline for Chinese commodity futures in three parts: a re
 - **56 commodities × 59 features** (93,040 rows): 52 TA-Lib / academic factors plus 7 basis anchors.
 - Each feature is winsorised, sector-neutralised and cross-sectionally standardised.
 - **Returns** are the dominant contract's own day-to-day price changes, with zero on roll days. An earlier version used a roll-adjusted main-contract series that still contained roll gaps; see the audit on the [momentum & carry page](/portfolio/momentum-carry-factor-library/). The correction cut the LightGBM Sharpe from 1.32 to 0.92 and the portfolio from 2.47 to 1.31.
-- **Label:** the cross-sectional rank of the 5-day forward return.
+- **Label:** the cross-sectional rank of the 5-day forward return. Every model on this page, trees and recurrent networks alike, is therefore a **cross-sectional** ranker and is scored by daily cross-sectional IC and a market-neutral long–short book; the sequence models in Section 3 differ only in taking each contract's own 20-day history as input.
 - **Split:** a single time cut at 2022-05-24. Training set 48,412 rows / 1,320 days; hold-out 44,628 rows / **952 days**.
 
 ## 2. LightGBM
@@ -76,7 +76,7 @@ Extending the purge to the 20-day input window (training samples must end 25 day
 
 ## 4. Multi-Strategy Portfolio
 
-Seven economically distinct legs: LightGBM, carry, LSTM, negative skew, a cointegration basket, basis momentum and 5-day reversal. Each leg is volatility-targeted on its own, and the seven are then equal-weighted.
+Seven economically distinct legs: LightGBM, carry, LSTM, negative skew, a cointegration basket, basis momentum and 5-day reversal. Six are cross-sectional long–short books (ranked across contracts, net exposure zero); the cointegration basket is a time-series spread trade. Each leg is volatility-targeted on its own, and the seven are then equal-weighted.
 
 **Costs:** six legs deduct nothing (no commission, no slippage). The cointegration basket deducts a 2 bp commission per unit of position change, still with no slippage. Rebalancing from the leg- and portfolio-level volatility targets is not charged.
 
